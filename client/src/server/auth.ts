@@ -48,6 +48,7 @@ export const authOptions: NextAuthOptions = {
     }),
   },
   adapter: PrismaAdapter(db),
+  debug: true,
   providers: [
     Auth0Provider({
       issuer: env.Auth0_issuer,

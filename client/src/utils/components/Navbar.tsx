@@ -1,3 +1,4 @@
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 export default function Navbar() {
   return (
@@ -30,16 +31,19 @@ export default function Navbar() {
             </div>
           </div>
           <div className="flex items-center justify-center gap-4">
-            <div className="flex items-center justify-center gap-2 border border-black px-5 py-2">
+            <button
+              className="flex items-center justify-center gap-2 border border-black px-5 py-2"
+              onClick={() => signIn()}
+            >
               <div className="text-base font-normal leading-normal text-black">
                 Log in
               </div>
-            </div>
-            <div className="flex items-center justify-center gap-2 border border-black bg-black px-5 py-2">
+            </button>
+            <button className="flex items-center justify-center gap-2 border border-black bg-black px-5 py-2">
               <div className="text-base font-normal leading-normal text-white">
                 Get started
               </div>
-            </div>
+            </button>
           </div>
         </div>
       </div>
