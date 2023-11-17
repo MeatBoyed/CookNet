@@ -6,7 +6,7 @@ export default function RecipeHeader() {
       </div>
       <div className="flex h-[118px] flex-col items-center justify-start gap-6 self-stretch">
         <div className="self-stretch text-[56px] font-bold leading-[67.20px] text-black">
-          Short heading goes here
+          Chocolate Cake
         </div>
         <div className="self-stretch text-lg font-normal leading-[27px] text-black">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.{" "}

@@ -1,11 +1,11 @@
 import Head from "next/head";
+import MaininfoEdit from "~/utils/components/Forms/MaininfoEdit";
 import Footer from "~/utils/components/Footer";
 import Navbar from "~/utils/components/Navbar";
-import Maininfo from "~/utils/components/RecipePage/MainInfo";
-import RecipeHeader from "~/utils/components/RecipePage/RecipeHeader";
 import StepCard from "~/utils/components/RecipePage/StepCard";
+import StepsInput from "./StepsInput";
 
-export default function RecipePage() {
+export default function Create() {
   const steps: string[] = [
     "Take a microwave-safe mug; make sure it's large enough to avoid overflow.",
     "In the mug, whisk together the flour, sugar, cocoa powder, baking powder, and a pinch of salt until well mixed.",
@@ -27,12 +27,8 @@ export default function RecipePage() {
       <main className=" flex min-h-screen flex-col items-center justify-center bg-white ">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           {/* <RecipeHeader /> */}
-          <Maininfo />
-          <div className="mt-10 flex flex-wrap items-start justify-center gap-5 ">
-            {steps.map((step, index) => (
-              <StepCard step={step} key={index} stepNo={index + 1} />
-            ))}
-          </div>
+          <MaininfoEdit />
+          <StepsInput />
         </div>
       </main>
       <Footer />

@@ -28,10 +28,10 @@ export default function Maininfo() {
           <div className="flex flex-col items-start justify-start gap-12">
             <div className="flex flex-col items-start justify-center gap-5">
               <div className="text-sm font-semibold leading-[21px] text-black">
-                Category
+                Recipe
               </div>
               <div className="text-3xl font-bold leading-[41.60px] text-black">
-                Blog title heading will go here
+                Chocolate Cake
               </div>
               <div className="text-base font-normal leading-normal text-black">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
