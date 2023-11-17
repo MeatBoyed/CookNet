@@ -4,18 +4,11 @@ import Footer from "~/utils/components/Footer";
 import Navbar from "~/utils/components/Navbar";
 import StepCard from "~/utils/components/RecipePage/StepCard";
 import StepsInput from "./StepsInput";
+import { useState } from "react";
 
 export default function Create() {
-  const steps: string[] = [
-    "Take a microwave-safe mug; make sure it's large enough to avoid overflow.",
-    "In the mug, whisk together the flour, sugar, cocoa powder, baking powder, and a pinch of salt until well mixed.",
-    "Pour in the milk, vegetable oil, and vanilla extract into the mug. Stir until the batter is smooth and no lumps remain.",
-    "If you're feeling a bit extra chocolaty, toss in a tablespoon of chocolate chips and give it a gentle stir.",
-    "Place the mug in the microwave and cook on high for 1 minute and 30 seconds. Cooking times may vary, so keep an eye on it to avoid overcooking.",
-    "After microwaving, carefully remove the mug (it will be hot!). The cake should be firm to the touch on top.",
-    "Allow the cake to cool for a minute or two before digging in. This time is perfect for adding a scoop of ice cream or a dusting of powdered sugar.",
-    "Grab a spoon and savor the warm, gooey goodness of your microwave chocolate cake. It's quick, easy, and oh-so-satisfying!",
-  ];
+  const [steps, setSteps] = useState<string[]>([]);
+
   return (
     <>
       <Head>
@@ -28,7 +21,7 @@ export default function Create() {
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           {/* <RecipeHeader /> */}
           <MaininfoEdit />
-          <StepsInput />
+          <StepsInput onChange={(steps) => setSteps(steps)} />
         </div>
       </main>
       <Footer />

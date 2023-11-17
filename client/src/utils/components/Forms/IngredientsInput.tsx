@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import { TiDeleteOutline } from "react-icons/ti";
 import { useEffect, useState } from "react";
-import InputField from "../InputField";
+import InputField from "./TextField";
 
 interface props {
   type?: string;

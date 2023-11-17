@@ -1,7 +1,7 @@
 import Image from "next/image";
 import ProfileThumbnail from "../../../img/ProfileThumbnail.png";
 import ImageThumbnail from "../../../img/ImageThumbnail.png";
-import InputField from "../InputField";
+import InputField from "./TextField";
 import { useSession } from "next-auth/react";
 import { IngredientsInput } from "./IngredientsInput";
 
