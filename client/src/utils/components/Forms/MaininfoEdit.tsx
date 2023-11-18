@@ -4,8 +4,21 @@ import ImageThumbnail from "../../../img/ImageThumbnail.png";
 import InputField from "./TextField";
 import { useSession } from "next-auth/react";
 import { IngredientsInput } from "./IngredientsInput";
+import { useState } from "react";
+import { Ingredient } from "@prisma/client";
+
+interface MainInfo {
+  title: string;
+  description: string;
+  ingredients: Ingredient[];
+}
 
 export default function MaininfoEdit() {
+  const [mainInfo, setMainInfo] = useState<MainInfo>({
+    title: "",
+    description: "",
+    ingredients: [],
+  });
   const { data } = useSession();
 
   return (
@@ -25,15 +38,18 @@ export default function MaininfoEdit() {
                 Recipe
               </div>
               <InputField
-                defaultText="Chocolate Cake"
+                onChange={(newValue) =>
+                  setMainInfo((prev) => ({ ...prev, title: newValue }))
+                }
+                value={mainInfo.title}
                 size="Large"
                 type="text"
               />
               <InputField
-                defaultText="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse varius enim in eros.
-		     "
+                value={mainInfo.description}
+                onChange={(newValue) =>
+                  setMainInfo((prev) => ({ ...prev, description: newValue }))
+                }
                 size="Default"
                 type="text"
               />
@@ -64,7 +80,12 @@ export default function MaininfoEdit() {
             <IngredientsInput
               name="Ingredients"
               placeholder="Add Ingredient"
-              onChange={() => null}
+              onChange={(newSelectedIngredients) =>
+                setMainInfo((prev) => ({
+                  ...prev,
+                  ingredients: newSelectedIngredients,
+                }))
+              }
             />
           </div>
         </div>
