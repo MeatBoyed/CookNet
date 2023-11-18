@@ -5,20 +5,25 @@ import InputField from "./TextField";
 import { useSession } from "next-auth/react";
 import { IngredientsInput } from "./IngredientsInput";
 import { useState } from "react";
-import { Ingredient } from "@prisma/client";
+import { type Ingredient } from "@prisma/client";
 
-interface MainInfo {
+export interface MainInfo {
   title: string;
   description: string;
   ingredients: Ingredient[];
 }
 
-export default function MaininfoEdit() {
-  const [mainInfo, setMainInfo] = useState<MainInfo>({
+type props = {
+  onChange: (newMainInfo: MainInfo) => void;
+};
+
+export default function MaininfoEdit({ onChange }: props) {
+  const defaultState = {
     title: "",
     description: "",
     ingredients: [],
-  });
+  };
+  const [mainInfo, setMainInfo] = useState<MainInfo>(defaultState);
   const { data } = useSession();
 
   return (
@@ -38,18 +43,20 @@ export default function MaininfoEdit() {
                 Recipe
               </div>
               <InputField
-                onChange={(newValue) =>
-                  setMainInfo((prev) => ({ ...prev, title: newValue }))
-                }
+                onChange={(newValue) => {
+                  setMainInfo((prev) => ({ ...prev, title: newValue }));
+                  if (mainInfo != defaultState) onChange(mainInfo);
+                }}
                 value={mainInfo.title}
                 size="Large"
                 type="text"
               />
               <InputField
                 value={mainInfo.description}
-                onChange={(newValue) =>
-                  setMainInfo((prev) => ({ ...prev, description: newValue }))
-                }
+                onChange={(newValue) => {
+                  setMainInfo((prev) => ({ ...prev, description: newValue }));
+                  if (mainInfo != defaultState) onChange(mainInfo);
+                }}
                 size="Default"
                 type="text"
               />
@@ -80,12 +87,13 @@ export default function MaininfoEdit() {
             <IngredientsInput
               name="Ingredients"
               placeholder="Add Ingredient"
-              onChange={(newSelectedIngredients) =>
+              onChange={(newSelectedIngredients) => {
                 setMainInfo((prev) => ({
                   ...prev,
                   ingredients: newSelectedIngredients,
-                }))
-              }
+                }));
+                if (mainInfo != defaultState) onChange(mainInfo);
+              }}
             />
           </div>
         </div>

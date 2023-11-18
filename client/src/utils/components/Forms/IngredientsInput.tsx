@@ -5,22 +5,19 @@ import { useEffect, useState } from "react";
 import InputField from "./TextField";
 import { Ingredient } from "@prisma/client";
 import NumberInput from "./NumberInput";
+import { number, object, string } from "zod";
 
 interface props {
-  type?: string;
-  name: string;
-  initalValues?: string[];
-  placeholder: string;
   onChange: (selectedIngredients: Ingredient[]) => void;
 }
 
-export const IngredientsInput: NextPage<props> = ({
-  type,
-  name,
-  placeholder,
-  initalValues,
-  onChange,
-}) => {
+export const IngredientSchema = object({
+  name: string(),
+  description: string().optional(),
+  quantity: number(),
+});
+
+export const IngredientsInput: NextPage<props> = ({ onChange }) => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([
     {
       name: "All-purpose Flour",
@@ -65,9 +62,9 @@ export const IngredientsInput: NextPage<props> = ({
       description: null,
     },
   ]);
-  const [selectedIngredients, setSelectedIngredients] = useState<Ingredient[]>(
-    [],
-  );
+  const [selectedIngredients, setSelectedIngredients] = useState<
+    IngredientSchema[]
+  >([]);
   const [selectedIngredient, setSelectedIngredient] = useState<Ingredient>({
     name: "",
     quantity: 0,

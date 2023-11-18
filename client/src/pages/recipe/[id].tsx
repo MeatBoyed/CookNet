@@ -2,7 +2,6 @@ import Head from "next/head";
 import Footer from "~/utils/components/Footer";
 import Navbar from "~/utils/components/Navbar";
 import Maininfo from "~/utils/components/RecipePage/MainInfo";
-import RecipeHeader from "~/utils/components/RecipePage/RecipeHeader";
 import StepCard from "~/utils/components/RecipePage/StepCard";
 
 export default function RecipePage() {
@@ -26,7 +25,6 @@ export default function RecipePage() {
       <Navbar />
       <main className=" flex min-h-screen flex-col items-center justify-center bg-white ">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          {/* <RecipeHeader /> */}
           <Maininfo />
           <div className="mt-10 flex flex-wrap items-start justify-center gap-5 ">
             {steps.map((step, index) => (

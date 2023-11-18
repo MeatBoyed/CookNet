@@ -75,13 +75,6 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-type Ingredient {
-  name        String
-  quantity    Float
-  description String?
-  createdAt   DateTime @default(now())
-}
-
 model Comment {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
   content  String
@@ -93,15 +86,26 @@ model Comment {
   @@map("comments")
 }
 
+model Ingredient {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  quantity    Float
+  description String?
+  createdAt   DateTime @default(now())
+  RecipeIds   String[] @db.ObjectId
+  Recipes     Recipe[] @relation(fields: [RecipeIds], references: [id])
+}
+
 model Recipe {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  authorId    String       @db.ObjectId
-  title       String
-  description String
-  steps       String[]
-  ingredients Ingredient[]
-  comments    Comment[]
-  author      User         @relation(fields: [authorId], references: [id])
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  authorId      String       @db.ObjectId
+  title         String
+  description   String
+  steps         String[]
+  ingredientsId String[]     @db.ObjectId
+  ingredients   Ingredient[] @relation(fields: [ingredientsId], references: [id])
+  comments      Comment[]
+  author        User         @relation(fields: [authorId], references: [id])
 
   @@map("recipes")
 }
