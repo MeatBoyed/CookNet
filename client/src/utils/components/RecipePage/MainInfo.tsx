@@ -1,19 +1,23 @@
 import Image from "next/image";
 import ProfileThumbnail from "../../../img/ProfileThumbnail.png";
 import ImageThumbnail from "../../../img/ImageThumbnail.png";
+import { Ingredient, IngredientOnRecipe, Recipe, User } from "@prisma/client";
 
-export default function Maininfo() {
-  const ingredients: string[] = [
-    "4 tablespoons all-purpose flour",
-    "4 tablespoons granulated sugar",
-    "2 tablespoons unsweetened cocoa powder",
-    "1/8 teaspoon baking powder",
-    "a pinch of salt",
-    "3 tablespoons milk",
-    "2 tablespoons vegetable oil",
-    "1/4 teaspoon vanilla extract",
-    "1 tablespoon chocolate chips (optional)",
-  ];
+interface props {
+  recipe: Recipe;
+  author: User;
+  ingredients: ({
+    ingredient: Ingredient;
+  } & {
+    quantity: number;
+    measurement: string;
+    optional: boolean;
+    ingredientId: string;
+    recipeId: string;
+  })[];
+}
+export default function Maininfo({ recipe, author, ingredients }: props) {
+  console.log(ingredients);
   return (
     <div className="flex w-full flex-row justify-between gap-20">
       <Image
@@ -31,11 +35,10 @@ export default function Maininfo() {
                 Recipe
               </div>
               <div className="text-3xl font-bold leading-[41.60px] text-black">
-                Chocolate Cake
+                {recipe.title}
               </div>
               <div className="text-base font-normal leading-normal text-black">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse varius enim in eros.
+                {recipe.description}
               </div>
             </div>
 
@@ -48,17 +51,11 @@ export default function Maininfo() {
               />
               <div className="flex flex-col gap-1">
                 <div className="text-sm font-semibold leading-[21px] text-black">
-                  Full name
+                  {author.name}
                 </div>
                 <div className="flex items-center justify-start gap-2">
                   <div className="text-sm font-normal leading-[21px] text-black">
-                    11 Jan 2022
-                  </div>
-                  <div className="text-lg font-normal leading-[27px] text-black">
-                    •
-                  </div>
-                  <div className="text-sm font-normal leading-[21px] text-black">
-                    5 min read
+                    {new Date().toLocaleDateString()}
                   </div>
                 </div>
               </div>
@@ -68,13 +65,15 @@ export default function Maininfo() {
 
           <div className="flex flex-wrap items-center justify-start gap-1">
             {ingredients
-              .sort((a, b) => a.length - b.length)
+              .sort(
+                (a, b) => a.ingredient.name.length - b.ingredient.name.length,
+              )
               .map((ingredient, index) => (
                 <button
                   key={index}
                   className="mb-2 me-2 rounded-full border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 "
                 >
-                  {ingredient}
+                  {ingredient.ingredient.name}
                 </button>
               ))}
           </div>

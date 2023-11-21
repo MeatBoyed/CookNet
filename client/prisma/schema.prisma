@@ -113,15 +113,16 @@ model Ingredient {
 }
 
 model IngredientOnRecipe {
+  id          String @id @map("_id") @db.ObjectId @default(auto())
   quantity    Float
   measurement String
   optional    Boolean
 
-  ingredientId String     @id @map("_id") @db.ObjectId
+  ingredientId String @db.ObjectId  
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
 
-  reecipeId String @db.ObjectId
-  recipe    Recipe @relation(fields: [reecipeId], references: [id])
+  recipeId String @db.ObjectId
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
 
   @@map("ingredientsOnRecipe")
 }

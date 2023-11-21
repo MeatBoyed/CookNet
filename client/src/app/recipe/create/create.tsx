@@ -1,8 +1,8 @@
 import Head from "next/head";
-import MaininfoEdit from "~/utils/components/Forms/MaininfoEdit";
+import MaininfoEdit from "~/utils/components/FormsElements/MaininfoEdit";
 import Footer from "~/utils/components/Footer";
 import Navbar from "~/utils/components/Navbar";
-import StepsInput from "./StepsInput";
+import StepsInput from "../../../utils/components/FormsElements/StepsInput";
 import { useEffect, useState } from "react";
 import { type Recipe } from "@prisma/client";
 import { signIn, useSession } from "next-auth/react";

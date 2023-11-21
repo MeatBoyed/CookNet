@@ -1,37 +1,40 @@
+"use client";
 import Image from "next/image";
 import ProfileThumbnail from "../../../img/ProfileThumbnail.png";
 import ImageThumbnail from "../../../img/ImageThumbnail.png";
 import InputField from "./TextField";
-import { useSession } from "next-auth/react";
-import { IngredientsInput } from "./IngredientsInput";
+import { getSession, useSession } from "next-auth/react";
 import { useState } from "react";
-import { type Ingredient } from "@prisma/client";
+import { type IngredientOnRecipe, type Ingredient } from "@prisma/client";
+import IngredientsInput from "./IngredientsInput";
 
+type props = {
+  ingredients: Ingredient[];
+  onChange: (newMainInfo: MainInfo) => void;
+};
 export interface MainInfo {
   title: string;
   description: string;
-  ingredients: Ingredient[];
+  ingredients: IngredientOnRecipe[];
+  authorId: string;
 }
 
-type props = {
-  onChange: (newMainInfo: MainInfo) => void;
-};
-
-export default function MaininfoEdit({ onChange }: props) {
-  const defaultState = {
+export default function MaininfoEdit({ ingredients, onChange }: props) {
+  const { data } = useSession();
+  const defaultState: MainInfo = {
     title: "",
     description: "",
     ingredients: [],
+    authorId: data?.user.id ?? "",
   };
   const [mainInfo, setMainInfo] = useState<MainInfo>(defaultState);
-  const { data } = useSession();
 
   return (
     <div className="flex w-full flex-row justify-between gap-20">
       <Image
-        className="flex h-[500px] w-[656px]"
-        height={500}
-        width={656}
+        className="flex h-[300px] w-[400px]"
+        height={300}
+        width={400}
         src={ImageThumbnail}
         alt="Recipe Thumbnail"
       />
@@ -50,6 +53,8 @@ export default function MaininfoEdit({ onChange }: props) {
                 value={mainInfo.title}
                 size="Large"
                 type="text"
+                name="Title"
+                placeholder="Carrot Cake"
               />
               <InputField
                 value={mainInfo.description}
@@ -59,6 +64,8 @@ export default function MaininfoEdit({ onChange }: props) {
                 }}
                 size="Default"
                 type="text"
+                placeholder="Charles would love a slice"
+                name="Short Description (optional)"
               />
             </div>
 
@@ -83,10 +90,12 @@ export default function MaininfoEdit({ onChange }: props) {
           </div>
           <div className="h-px w-full bg-black" />
 
-          <div className="flex flex-wrap items-center justify-start gap-1">
+          <div className="flex flex-wrap items-center justify-start gap-2">
+            <div className="w-full text-sm font-semibold leading-[21px] text-black">
+              Ingredients
+            </div>
             <IngredientsInput
-              name="Ingredients"
-              placeholder="Add Ingredient"
+              ingredients={ingredients}
               onChange={(newSelectedIngredients) => {
                 setMainInfo((prev) => ({
                   ...prev,
