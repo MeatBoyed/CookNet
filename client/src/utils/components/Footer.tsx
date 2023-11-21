@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <div className="mt-24 flex w-full flex-col items-center justify-center gap-10 bg-white ">
+    <div className=" mt-24 flex w-full flex-col items-center justify-center gap-10 bg-white ">
       <div className="flex w-full flex-col items-center justify-center gap-5 px-5">
         <p className="text-center text-base font-normal leading-normal text-black">
           Join our newsletter to stay up to date on features and releases.
