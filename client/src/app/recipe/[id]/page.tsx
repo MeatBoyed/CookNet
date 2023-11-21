@@ -1,10 +1,7 @@
-import Head from "next/head";
 import { notFound } from "next/navigation";
 import { db } from "~/server/db";
-import Footer from "~/utils/components/Footer";
-import Navbar from "~/utils/components/Navbar";
 import Maininfo from "~/utils/components/RecipePage/MainInfo";
-import StepCard from "~/utils/components/RecipePage/StepCard";
+import { StepsRenderer } from "~/utils/components/RecipePage/Step";
 
 export default async function RecipePage({
   params,
@@ -14,7 +11,12 @@ export default async function RecipePage({
   // if (Buffer.byteLength(params.id, "utf-8") != 12) return notFound();
   const recipe = await db.recipe.findUnique({
     where: { id: params.id },
-    include: { author: true, ingredients: { include: { ingredient: true } } },
+    include: {
+      author: true,
+      ingredients: {
+        include: { ingredient: true },
+      },
+    },
   });
 
   if (!recipe) return notFound();
@@ -26,12 +28,7 @@ export default async function RecipePage({
         ingredients={recipe.ingredients}
         author={recipe.author}
       />
-      {/* <div className="mt-10 flex flex-wrap items-start justify-center gap-5 "> */}
-      <div className="grid w-full grid-cols-2 gap-x-4 gap-y-10 ">
-        {recipe.steps.map((step, index) => (
-          <StepCard step={step} key={index} stepNo={index + 1} />
-        ))}
-      </div>
+      <StepsRenderer steps={recipe.steps} />
     </div>
   );
 }

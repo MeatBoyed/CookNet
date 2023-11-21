@@ -1,7 +1,12 @@
 import Image from "next/image";
 import ProfileThumbnail from "../../../img/ProfileThumbnail.png";
 import ImageThumbnail from "../../../img/ImageThumbnail.png";
-import { Ingredient, IngredientOnRecipe, Recipe, User } from "@prisma/client";
+import {
+  type Ingredient,
+  IngredientOnRecipe,
+  type Recipe,
+  type User,
+} from "@prisma/client";
 
 interface props {
   recipe: Recipe;
@@ -17,9 +22,8 @@ interface props {
   })[];
 }
 export default function Maininfo({ recipe, author, ingredients }: props) {
-  console.log(ingredients);
   return (
-    <div className="flex w-full flex-col justify-between gap-8">
+    <div className="flex w-full flex-col justify-between gap-8 md:flex-row">
       <Image
         className="w-full"
         height={500}
@@ -48,18 +52,23 @@ export default function Maininfo({ recipe, author, ingredients }: props) {
         </div>
         <div className="h-px w-full bg-black" />
 
-        <div className="flex flex-wrap items-center justify-start gap-2">
-          {ingredients
-            .sort((a, b) => a.ingredient.name.length - b.ingredient.name.length)
-            .map((ingredient, index) => (
-              <button
-                key={index}
-                className="rounded border border-gray-300 bg-white px-3 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 "
-              >
-                {ingredient.quantity} {ingredient.ingredient.name}{" "}
-                {ingredient.measurement} {ingredient.optional && "(Optional)"}
-              </button>
-            ))}
+        <div className="flex flex-col items-start justify-start gap-2">
+          <p className="text-sm font-semibold text-black">Ingredients</p>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {ingredients
+              .sort(
+                (a, b) => a.ingredient.name.length - b.ingredient.name.length,
+              )
+              .map((ingredient, index) => (
+                <button
+                  key={index}
+                  className="rounded border border-gray-300 bg-white px-3 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 "
+                >
+                  {ingredient.quantity} {ingredient.ingredient.name}{" "}
+                  {ingredient.measurement} {ingredient.optional && "(Optional)"}
+                </button>
+              ))}
+          </div>
         </div>
       </div>
     </div>
