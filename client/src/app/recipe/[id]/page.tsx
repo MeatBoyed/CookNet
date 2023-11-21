@@ -26,7 +26,8 @@ export default async function RecipePage({
         ingredients={recipe.ingredients}
         author={recipe.author}
       />
-      <div className="mt-10 flex flex-wrap items-start justify-center gap-5 ">
+      {/* <div className="mt-10 flex flex-wrap items-start justify-center gap-5 "> */}
+      <div className="grid w-full grid-cols-2 gap-x-4 gap-y-10 ">
         {recipe.steps.map((step, index) => (
           <StepCard step={step} key={index} stepNo={index + 1} />
         ))}

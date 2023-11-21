@@ -19,9 +19,9 @@ interface props {
 export default function Maininfo({ recipe, author, ingredients }: props) {
   console.log(ingredients);
   return (
-    <div className="flex w-full flex-col justify-between gap-20">
+    <div className="flex w-full flex-col justify-between gap-8">
       <Image
-        className=""
+        className="w-full"
         height={500}
         width={656}
         src={ImageThumbnail}
@@ -46,17 +46,18 @@ export default function Maininfo({ recipe, author, ingredients }: props) {
             </p>
           </div>
         </div>
-        <div className="h-px w-[608px] bg-black" />
+        <div className="h-px w-full bg-black" />
 
-        <div className="flex flex-wrap items-center justify-start gap-1">
+        <div className="flex flex-wrap items-center justify-start gap-2">
           {ingredients
             .sort((a, b) => a.ingredient.name.length - b.ingredient.name.length)
             .map((ingredient, index) => (
               <button
                 key={index}
-                className="mb-2 me-2 rounded-full border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 "
+                className="rounded border border-gray-300 bg-white px-3 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 "
               >
-                {ingredient.ingredient.name}
+                {ingredient.quantity} {ingredient.ingredient.name}{" "}
+                {ingredient.measurement} {ingredient.optional && "(Optional)"}
               </button>
             ))}
         </div>
