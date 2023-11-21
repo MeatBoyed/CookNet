@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import InputField from "./TextField";
 import { type IngredientOnRecipe, type Ingredient } from "@prisma/client";
 import NumberInput from "./NumberInput";
+import MeasurmentSelectors from "./MeasurmentSelectors";
 
 interface props {
   ingredients: Ingredient[];
@@ -20,38 +21,9 @@ const DefaultState: IngredientOnRecipe = {
   recipeId: "",
 };
 
-const measurementsCat = ["Volume", "Weight", "Dry", "Conversions"];
-const measurements = {
-  volume: [
-    "Teaspoon",
-    "Tablespoon",
-    "Fluid Ounce",
-    "Cup",
-    "Pint",
-    "Quart",
-    "Gallon",
-    "Milliliter",
-    "Liter",
-  ],
-  weight: ["Ounce", "Pound", "Gram", "Kilogram"],
-  dry: ["Dash", "Pinch", "Smidgen", "Drop"],
-  conversions: {
-    tablespoonToTeaspoon: 3,
-    cupToTablespoon: 16,
-    fluidOunceToTablespoon: 2,
-    pintToCup: 2,
-    quartToCup: 4,
-    gallonToCup: 16,
-    ounceToGram: 28.35,
-    poundToOunce: 16,
-    kilogramToPound: 2.20462,
-  },
-};
 // Show highlighting of Selected Ingredient (changing the ingredientId Prop button/item)
 
 export default function IngredientsInput({ ingredients, onChange }: props) {
-  const [measurementLvl1, setMeasurementLvl1] = useState<string>("");
-
   // Currently Selected Ingredeient for Recipe ()
   const [selectedIngredients, setSelectedIngredients] = useState<
     IngredientOnRecipe[]
@@ -60,10 +32,6 @@ export default function IngredientsInput({ ingredients, onChange }: props) {
   // Currently Selected Ingredient
   const [selectedIngredient, setSelectedIngredient] =
     useState<IngredientOnRecipe>(DefaultState);
-
-  useEffect(() => {
-    onChange(selectedIngredients);
-  }, [selectedIngredients]);
 
   return (
     <div className="flex w-full flex-col justify-center gap-5">
@@ -95,10 +63,10 @@ export default function IngredientsInput({ ingredients, onChange }: props) {
 
       <div className="flex w-full flex-col gap-5 border-2 border-black px-2 py-3">
         {/* Header */}
-        <div className="flex w-full items-center justify-center gap-5">
+        <div className="flex w-full flex-col items-center justify-center gap-5 md:flex-row">
           <InputField
             onChange={() => null}
-            placeholder="Search"
+            placeholder="Search Ingredients"
             size="Small"
             type="text"
           />
@@ -111,44 +79,16 @@ export default function IngredientsInput({ ingredients, onChange }: props) {
             size="Small"
             type="number"
           />
-          <InputField
-            onChange={(newValue) =>
-              setSelectedIngredient((prev) => ({
-                ...prev,
-                measurement: newValue,
-              }))
-            }
-            value={selectedIngredient.measurement}
-            placeholder="Measurement"
-            size="Small"
-            type="text"
-          />
-          <select
-            id={"Measurment"}
-            onChange={(e) => setMeasurementLvl1(e.target.value)}
-          >
-            {/* <option value={""} className="font-semibold">
-              {customDefaultLabel ? customDefaultLabel : `All ${name}(s)`}
-            </option> */}
-            {measurements.volume.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>{" "}
-          <select
-            id={name + "Selector"}
-            onChange={(e) => setMeasurementLvl1(e.target.value)}
-          >
-            {/* <option value={""} className="font-semibold">
-              {customDefaultLabel ? customDefaultLabel : `All ${name}(s)`}
-            </option> */}
-            {measurementsCat.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+          <div className="flex w-full items-center justify-between ">
+            <MeasurmentSelectors
+              onChange={(newMeasurment) =>
+                setSelectedIngredient((prev) => ({
+                  ...prev,
+                  measurement: newMeasurment,
+                }))
+              }
+            />
+          </div>
           <div className="flex items-center justify-center gap-2">
             <p className="text-sm font-semibold leading-[21px] text-black">
               Optional
@@ -171,6 +111,7 @@ export default function IngredientsInput({ ingredients, onChange }: props) {
                 selectedIngredient.ingredientId != ""
               ) {
                 setSelectedIngredients((prev) => [...prev, selectedIngredient]);
+                onChange(selectedIngredients);
                 setSelectedIngredient(DefaultState);
               }
             }}
@@ -193,7 +134,7 @@ export default function IngredientsInput({ ingredients, onChange }: props) {
                     ingredientId: ingredient.id,
                   }))
                 }
-                className="mb-2 me-2 rounded-full border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 "
+                className="rounded border border-gray-300 px-3 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 "
               >
                 {ingredient.name}
               </button>

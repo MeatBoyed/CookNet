@@ -24,10 +24,10 @@ export default function Navbar() {
           </div> */}
         {data ? (
           <button className="flex items-center justify-center gap-2 border border-black bg-black px-5 py-2">
-            <h1 className="text-base font-normal leading-normal text-white">
+            <p className="text-base font-normal leading-normal text-white">
               {/* My Recipes */}
               Profile
-            </h1>
+            </p>
           </button>
         ) : (
           <button

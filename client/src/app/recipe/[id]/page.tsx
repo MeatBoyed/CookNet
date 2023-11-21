@@ -3,6 +3,11 @@ import { db } from "~/server/db";
 import Maininfo from "~/utils/components/RecipePage/MainInfo";
 import { StepsRenderer } from "~/utils/components/RecipePage/Step";
 
+export const metadata = {
+  title: "CookNet",
+  description: "Just Do it - CookNet",
+};
+
 export default async function RecipePage({
   params,
 }: {

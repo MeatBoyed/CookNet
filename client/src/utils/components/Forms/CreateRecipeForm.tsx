@@ -34,7 +34,7 @@ export default function CreateRecipeForm({ ingredients }: props) {
   };
 
   return (
-    <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
+    <>
       {message}
       <div className="flex w-full items-start justify-between gap-4 ">
         <button className="flex items-center justify-center gap-2 border border-black px-5 py-2">
@@ -62,6 +62,6 @@ export default function CreateRecipeForm({ ingredients }: props) {
           setFormData((prev) => ({ ...prev, steps: newSteps }))
         }
       />
-    </div>
+    </>
   );
 }
