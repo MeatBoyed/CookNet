@@ -2,32 +2,16 @@ export default function CategoriesSection() {
   return (
     <section
       id="Categories"
-      className="flex h-full w-full items-center justify-center"
+      className="flex w-full items-center justify-center gap-2"
     >
-      <div className="flex items-center justify-center gap-2 border border-black px-4 py-2">
-        <div className=" text-base font-normal leading-normal text-black">
-          View all
-        </div>
+      <div className="border border-black bg-black p-2 text-white">
+        <p className=" text-base font-normal leading-normal">View all</p>
       </div>
-      <div className="flex items-center justify-center gap-2 px-4 py-2">
-        <div className="text-base font-normal leading-normal text-black">
-          Category one
-        </div>
+      <div className="border border-black p-2">
+        <p className="text-base font-normal leading-normal">Meals</p>
       </div>
-      <div className="flex items-center justify-center gap-2 px-4 py-2">
-        <div className="text-base font-normal leading-normal text-black">
-          Category two
-        </div>
-      </div>
-      <div className="flex items-center justify-center gap-2 px-4 py-2">
-        <div className="text-base font-normal leading-normal text-black">
-          Category three
-        </div>
-      </div>
-      <div className="flex items-center justify-center gap-2 px-4 py-2">
-        <div className="text-base font-normal leading-normal text-black">
-          Category four
-        </div>
+      <div className="border border-black p-2">
+        <p className="text-base font-normal leading-normal">Dessert</p>
       </div>
     </section>
   );
