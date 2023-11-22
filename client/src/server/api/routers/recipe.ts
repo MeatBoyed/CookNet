@@ -5,38 +5,86 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+import { db } from "~/server/db";
+
+const MainInfoSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  ingredients: z.array(
+    z.object({
+      quantity: z.number(),
+      measurement: z.string(),
+      optional: z.boolean(),
+      ingredientId: z.string(), // Assuming it's a string, adjust as needed
+    }),
+  ),
+  steps: z.array(z.string()),
+  authorId: z.string(), // Assuming it's a string, adjust as needed
+});
+
+const IngredientOnRecipe = z.object({
+  id: z.string(),
+  quantity: z.number(),
+  measurement: z.string(),
+  optional: z.boolean(),
+  ingredientId: z.string(),
+  recipeId: z.string(),
+});
+
+const MainInfo = z.object({
+  title: z.string(),
+  description: z.string(),
+  ingredients: z.array(IngredientOnRecipe),
+  authorId: z.string(),
+});
+
+const RecipeFormData = z.object({
+  mainInfo: MainInfo,
+  steps: z.array(z.string()),
+});
 
 export const recipeRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-
-  create: protectedProcedure
-    .input(z.object({ name: z.string().min(1) }))
+  createRecipe: publicProcedure
+    .input(RecipeFormData)
     .mutation(async ({ ctx, input }) => {
-      // simulate a slow db call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (input.steps.length === 0) {
+        return { type: "error", message: "No Steps" };
+      }
 
-      return ctx.db.post.create({
-        data: {
-          name: input.name,
-          createdBy: { connect: { id: ctx.session.user.id } },
-        },
-      });
+      try {
+        const res = await ctx.db.recipe.create({
+          data: {
+            title: input.mainInfo.title,
+            description: input.mainInfo.description,
+            steps: input.steps,
+            author: {
+              connect: { id: input.mainInfo.authorId },
+            },
+            ingredients: {
+              create: input.mainInfo.ingredients.map((ingredient) => ({
+                quantity: ingredient.quantity,
+                measurement: ingredient.measurement,
+                optional: ingredient.optional,
+                ingredient: {
+                  connect: { id: ingredient.ingredientId },
+                },
+              })),
+            },
+          },
+        });
+
+        // if (res.id === undefined) {
+        //   return { type: "error", message: "Not Added" };
+        // }
+
+        return { type: "success", recipeId: res.id };
+      } catch (error) {
+        console.error("Error creating recipe:", error);
+        return {
+          type: "error",
+          message:
+            "An error occurred while creating the recipe. Please try again.",
+        };
+      }
     }),
-
-  getLatest: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.post.findFirst({
-      orderBy: { createdAt: "desc" },
-      where: { createdBy: { id: ctx.session.user.id } },
-    });
-  }),
-
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
-  }),
 });

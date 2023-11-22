@@ -140,7 +140,11 @@ export default function IngredientsInput({
                     ingredientId: ingredient.id,
                   }))
                 }
-                className="rounded border border-gray-300 px-3 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 "
+                className={`${
+                  selectedIngredient.ingredientId == ingredient.id
+                    ? "bg-blue-400"
+                    : ""
+                } rounded border border-gray-300 px-3 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200`}
               >
                 {ingredient.name}
               </button>
