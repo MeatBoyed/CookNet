@@ -4,13 +4,15 @@ import ProfileThumbnail from "../../../img/ProfileThumbnail.png";
 import ImageThumbnail from "../../../img/ImageThumbnail.png";
 import InputField from "./TextField";
 import { getSession, useSession } from "next-auth/react";
-import { useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import { type IngredientOnRecipe, type Ingredient } from "@prisma/client";
 import IngredientsInput from "./IngredientsInput";
+import { type RecipeFormData } from "../Forms/CreateRecipeForm";
 
 type props = {
+  mainInfo: MainInfo;
+  setMainInfo: Dispatch<SetStateAction<MainInfo>>;
   ingredients: Ingredient[];
-  onChange: (newMainInfo: MainInfo) => void;
 };
 export interface MainInfo {
   title: string;
@@ -19,15 +21,13 @@ export interface MainInfo {
   authorId: string;
 }
 
-export default function MaininfoEdit({ ingredients, onChange }: props) {
+export default function MaininfoEdit({
+  mainInfo,
+  setMainInfo,
+  ingredients,
+}: props) {
   const { data } = useSession();
-  const defaultState: MainInfo = {
-    title: "",
-    description: "",
-    ingredients: [],
-    authorId: data?.user.id ?? "",
-  };
-  const [mainInfo, setMainInfo] = useState<MainInfo>(defaultState);
+  // const [mainInfo, setMainInfo] = useState<MainInfo>(defaultState);
 
   return (
     <div className="flex w-full flex-col justify-between gap-8 md:flex-row md:gap-10">
@@ -48,7 +48,6 @@ export default function MaininfoEdit({ ingredients, onChange }: props) {
               <InputField
                 onChange={(newValue) => {
                   setMainInfo((prev) => ({ ...prev, title: newValue }));
-                  if (mainInfo != defaultState) onChange(mainInfo);
                 }}
                 value={mainInfo.title}
                 size="Large"
@@ -60,7 +59,6 @@ export default function MaininfoEdit({ ingredients, onChange }: props) {
                 value={mainInfo.description}
                 onChange={(newValue) => {
                   setMainInfo((prev) => ({ ...prev, description: newValue }));
-                  if (mainInfo != defaultState) onChange(mainInfo);
                 }}
                 size="Default"
                 type="text"

@@ -54,7 +54,7 @@ export default function Maininfo({ recipe, author, ingredients }: props) {
 
         <div className="flex flex-col items-start justify-start gap-2">
           <p className="text-sm font-semibold text-black">Ingredients</p>
-          <div className="flex flex-wrap items-center justify-center gap-2">
+          <div className="flex flex-wrap items-start justify-center gap-2">
             {ingredients
               .sort(
                 (a, b) => a.ingredient.name.length - b.ingredient.name.length,

@@ -3,39 +3,34 @@ import { type Ingredient } from "@prisma/client";
 import MaininfoEdit, { type MainInfo } from "../FormsElements/MaininfoEdit";
 import StepsInput from "../FormsElements/StepsInput";
 import { useState } from "react";
-import { CreateRecipeEndPoint } from "~/app/recipe/create/EndPoints";
+import { UpdateRecipe } from "~/app/recipe/create/EndPoints";
 import { useRouter } from "next/navigation";
 import Spinner from "../Loading";
 import { useSession } from "next-auth/react";
+import { type RecipeWithDetails } from "~/app/recipe/[id]/edit/page";
+import { type RecipeFormData, ValidateData } from "./CreateRecipeForm";
 
 interface props {
+  recipe: RecipeWithDetails;
   ingredients: Ingredient[];
 }
 
-export interface RecipeFormData {
-  mainInfo: MainInfo;
-  steps: string[];
-  recipeId?: string;
-}
-
-// States:
-// Erros, Loading, Success
-
-export default function CreateRecipeForm({ ingredients }: props) {
+export default function UpdateRecipeForm({ recipe, ingredients }: props) {
   const router = useRouter();
   const { data } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const [mainInfo, setMainInfo] = useState<MainInfo>({
-    title: "",
-    description: "",
-    ingredients: [],
-    authorId: data?.user.id ?? "",
+    title: recipe.title,
+    description: recipe.description,
+    ingredients: recipe.ingredients,
+    authorId: recipe.author.id,
   });
   const [formData, setFormData] = useState<RecipeFormData>({
     mainInfo: mainInfo,
-    steps: [],
+    steps: recipe.steps,
+    recipeId: recipe.id,
   });
 
   const handleSubmit = async () => {
@@ -48,7 +43,7 @@ export default function CreateRecipeForm({ ingredients }: props) {
       if (!valid) return setErrorMessage(valid);
 
       // Your existing logic for creating the recipe goes here
-      const res = await CreateRecipeEndPoint(formData);
+      const res = await UpdateRecipe(formData);
       if (res.errorMessage == "" && res.id != "") {
         return router.push(`/recipe/${res.id}`);
       }
@@ -81,7 +76,7 @@ export default function CreateRecipeForm({ ingredients }: props) {
           className="flex items-center justify-center gap-2 border border-black bg-black px-5 py-2"
         >
           <div className="text-base font-normal leading-normal text-white">
-            Create
+            Update
           </div>
         </button>
       </div>
@@ -103,12 +98,3 @@ export default function CreateRecipeForm({ ingredients }: props) {
     </>
   );
 }
-
-export const ValidateData = (formData: RecipeFormData) => {
-  if (formData.steps.length == 0) return "You've forgotten to add Instructions";
-  if (formData.mainInfo.title == "") return "Your Recipe needs a Title";
-  if (formData.mainInfo.ingredients.length > 0 == false)
-    return "You've forgotten to add Ingredients";
-
-  return true;
-};
