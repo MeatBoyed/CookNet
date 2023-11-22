@@ -1,12 +1,12 @@
 "use client";
 
 import { TiDeleteOutline } from "react-icons/ti";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import InputField from "./TextField";
 import { type IngredientOnRecipe, type Ingredient } from "@prisma/client";
 import NumberInput from "./NumberInput";
 import MeasurmentSelectors from "./MeasurmentSelectors";
-import { MainInfo } from "./MaininfoEdit";
+import { type MainInfo } from "./MaininfoEdit";
 
 interface props {
   ingredients: Ingredient[];
@@ -70,7 +70,7 @@ export default function IngredientsInput({
       {/* Ingredient Selection (Input) */}
       <div className="flex w-full flex-col gap-5 border-2 border-black px-2 py-3">
         {/* Header */}
-        <div className="flex w-full flex-col items-center justify-center gap-5 md:flex-row">
+        <div className="flex w-full flex-col items-center justify-center gap-5 ">
           <InputField
             onChange={() => null}
             placeholder="Search Ingredients"

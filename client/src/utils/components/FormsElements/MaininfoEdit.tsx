@@ -30,7 +30,7 @@ export default function MaininfoEdit({ ingredients, onChange }: props) {
   const [mainInfo, setMainInfo] = useState<MainInfo>(defaultState);
 
   return (
-    <div className="flex w-full flex-col justify-between gap-8 md:flex-row">
+    <div className="flex w-full flex-col justify-between gap-8 md:flex-row md:gap-10">
       <Image
         className="flex h-[300px] w-[400px]"
         height={300}
