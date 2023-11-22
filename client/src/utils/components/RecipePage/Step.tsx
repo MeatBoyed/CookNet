@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { TiDeleteOutline } from "react-icons/ti";
 
 export const StepsRenderer = ({ steps }: { steps: string[] }) => {
   const [expandAll, setExpandAll] = useState<boolean>(false);
@@ -32,10 +33,12 @@ const Step = ({
   stepNo,
   content,
   openStep,
+  removeStep,
 }: {
   stepNo: number;
   content: string;
   openStep: boolean;
+  removeStep?: (step: string) => void;
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(openStep);
 
@@ -49,7 +52,7 @@ const Step = ({
         className="flex cursor-pointer items-center justify-between py-2"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <h2 className="text-base font-semibold">Step {stepNo}</h2>
+        <p className="text-base font-semibold">Step {stepNo}</p>
         <svg
           className={`h-6 w-6 transform transition-transform ${
             isOpen ? "rotate-180" : ""
@@ -68,8 +71,11 @@ const Step = ({
         </svg>
       </div>
       {isOpen && (
-        <div className="p-4">
+        <div className="flex items-center justify-between p-4">
           <p className="font-base text-gray-900">{content}</p>
+          {removeStep && (
+            <TiDeleteOutline size={30} onClick={() => removeStep(content)} />
+          )}
         </div>
       )}
     </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 const measurementsCat = ["Volume", "Weight", "Dry", "Conversions"];
 const measurements = {
@@ -28,9 +28,20 @@ const measurements = {
   },
 };
 export default function MeasurmentSelectors({
-  onChange,
+  measurement,
+  setSelectedIngredient,
 }: {
-  onChange: (newMeasurment: string) => void;
+  measurement: string;
+  setSelectedIngredient: Dispatch<
+    SetStateAction<{
+      id: string;
+      quantity: number;
+      measurement: string;
+      optional: boolean;
+      ingredientId: string;
+      recipeId: string;
+    }>
+  >;
 }) {
   const [type, setType] = useState<string>("");
 
@@ -38,8 +49,13 @@ export default function MeasurmentSelectors({
     <>
       <select
         id={"Measurment"}
-        value={type}
-        onChange={(e) => onChange(e.target.value)}
+        value={measurement}
+        onChange={(e) =>
+          setSelectedIngredient((prev) => ({
+            ...prev,
+            measurement: e.target.value,
+          }))
+        }
         className="rounded border border-gray-300 px-2 py-1"
       >
         <option value={""} className="font-semibold">

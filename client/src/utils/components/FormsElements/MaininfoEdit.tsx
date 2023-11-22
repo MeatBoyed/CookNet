@@ -96,13 +96,8 @@ export default function MaininfoEdit({ ingredients, onChange }: props) {
             </div>
             <IngredientsInput
               ingredients={ingredients}
-              onChange={(newSelectedIngredients) => {
-                setMainInfo((prev) => ({
-                  ...prev,
-                  ingredients: newSelectedIngredients,
-                }));
-                if (mainInfo != defaultState) onChange(mainInfo);
-              }}
+              selectedIngredients={mainInfo.ingredients}
+              setMainInfo={setMainInfo}
             />
           </div>
         </div>

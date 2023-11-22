@@ -57,11 +57,7 @@ export default function CreateRecipeForm({ ingredients }: props) {
         }
         ingredients={ingredients}
       />
-      <StepsInput
-        onChange={(newSteps) =>
-          setFormData((prev) => ({ ...prev, steps: newSteps }))
-        }
-      />
+      <StepsInput steps={formData.steps} setFormData={setFormData} />
     </>
   );
 }

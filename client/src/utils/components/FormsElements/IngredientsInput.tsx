@@ -1,15 +1,17 @@
 "use client";
 
 import { TiDeleteOutline } from "react-icons/ti";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import InputField from "./TextField";
 import { type IngredientOnRecipe, type Ingredient } from "@prisma/client";
 import NumberInput from "./NumberInput";
 import MeasurmentSelectors from "./MeasurmentSelectors";
+import { MainInfo } from "./MaininfoEdit";
 
 interface props {
   ingredients: Ingredient[];
-  onChange: (selectedIngredients: IngredientOnRecipe[]) => void;
+  selectedIngredients: IngredientOnRecipe[];
+  setMainInfo: Dispatch<SetStateAction<MainInfo>>;
 }
 
 const DefaultState: IngredientOnRecipe = {
@@ -23,18 +25,18 @@ const DefaultState: IngredientOnRecipe = {
 
 // Show highlighting of Selected Ingredient (changing the ingredientId Prop button/item)
 
-export default function IngredientsInput({ ingredients, onChange }: props) {
-  // Currently Selected Ingredeient for Recipe ()
-  const [selectedIngredients, setSelectedIngredients] = useState<
-    IngredientOnRecipe[]
-  >([]);
-
+export default function IngredientsInput({
+  ingredients,
+  selectedIngredients,
+  setMainInfo,
+}: props) {
   // Currently Selected Ingredient
   const [selectedIngredient, setSelectedIngredient] =
     useState<IngredientOnRecipe>(DefaultState);
 
   return (
     <div className="flex w-full flex-col justify-center gap-5">
+      {/* Display Selected Ingredients */}
       <div className="flex items-center justify-start">
         {selectedIngredients.map((ingredient, index) => (
           <button
@@ -51,16 +53,21 @@ export default function IngredientsInput({ ingredients, onChange }: props) {
             </p>
             <TiDeleteOutline
               size={30}
-              onClick={() =>
-                setSelectedIngredients(
-                  selectedIngredients.filter((ingre) => ingre != ingredient),
-                )
-              }
+              onClick={() => {
+                const newSI = selectedIngredients.filter(
+                  (ingre) => ingre != ingredient,
+                );
+                setMainInfo((prev: MainInfo) => ({
+                  ...prev,
+                  ingredients: newSI,
+                }));
+              }}
             />
           </button>
         ))}
       </div>
 
+      {/* Ingredient Selection (Input) */}
       <div className="flex w-full flex-col gap-5 border-2 border-black px-2 py-3">
         {/* Header */}
         <div className="flex w-full flex-col items-center justify-center gap-5 md:flex-row">
@@ -81,12 +88,8 @@ export default function IngredientsInput({ ingredients, onChange }: props) {
           />
           <div className="flex w-full items-center justify-between ">
             <MeasurmentSelectors
-              onChange={(newMeasurment) =>
-                setSelectedIngredient((prev) => ({
-                  ...prev,
-                  measurement: newMeasurment,
-                }))
-              }
+              measurement={selectedIngredient.measurement}
+              setSelectedIngredient={setSelectedIngredient}
             />
           </div>
           <div className="flex items-center justify-center gap-2">
@@ -110,8 +113,11 @@ export default function IngredientsInput({ ingredients, onChange }: props) {
                 selectedIngredient.measurement != "" &&
                 selectedIngredient.ingredientId != ""
               ) {
-                setSelectedIngredients((prev) => [...prev, selectedIngredient]);
-                onChange(selectedIngredients);
+                selectedIngredients.push(selectedIngredient);
+                setMainInfo((prev: MainInfo) => ({
+                  ...prev,
+                  ingredients: selectedIngredients,
+                }));
                 setSelectedIngredient(DefaultState);
               }
             }}
@@ -121,7 +127,7 @@ export default function IngredientsInput({ ingredients, onChange }: props) {
           </button>
         </div>
 
-        {/* Ingredients */}
+        {/* Display available Ingredients */}
         <div>
           {ingredients
             .sort((a, b) => a.name.length - b.name.length)
