@@ -1,12 +1,6 @@
 import Image from "next/image";
-import ProfileThumbnail from "../../../img/ProfileThumbnail.png";
 import ImageThumbnail from "../../../img/ImageThumbnail.png";
-import {
-  type Ingredient,
-  IngredientOnRecipe,
-  type Recipe,
-  type User,
-} from "@prisma/client";
+import { type Ingredient, type Recipe, type User } from "@prisma/client";
 
 interface props {
   recipe: Recipe;

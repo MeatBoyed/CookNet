@@ -13,7 +13,6 @@ export default async function RecipePage({
 }: {
   params: { id: string };
 }) {
-  // if (Buffer.byteLength(params.id, "utf-8") != 12) return notFound();
   const recipe = await db.recipe.findUnique({
     where: { id: params.id },
     include: {

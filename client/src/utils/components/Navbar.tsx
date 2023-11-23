@@ -1,9 +1,11 @@
-"use client";
-import { useSession, signIn } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { signIn } from "next-auth/react";
+import { MdOutlineLogout } from "react-icons/md";
 import Link from "next/link";
+import { authOptions } from "~/server/auth";
 
-export default function Navbar() {
-  const { data } = useSession();
+export default async function Navbar() {
+  const session = await getServerSession(authOptions);
 
   return (
     <nav className="flex w-full items-center justify-between border-b-[1px] border-b-black bg-white p-2  shadow-inner">
@@ -22,21 +24,31 @@ export default function Navbar() {
               Link Four
             </div>
           </div> */}
-        {data ? (
-          <button className="flex items-center justify-center gap-2 border border-black bg-black px-5 py-2">
-            <p className="text-base font-normal leading-normal text-white">
-              {/* My Recipes */}
-              Profile
-            </p>
-          </button>
+        {session ? (
+          <div className="flex items-center justify-center gap-5">
+            <button className="flex items-center justify-center gap-2 border border-black bg-black px-2 py-2">
+              <Link
+                className="text-sm font-normal leading-normal text-white"
+                href={`/user/${session.user.id}`}
+              >
+                Cook Book
+              </Link>
+            </button>
+            <Link
+              className="text-base font-normal leading-normal text-black"
+              href={"/api/auth/signout"}
+            >
+              <MdOutlineLogout size={25} />
+            </Link>
+          </div>
         ) : (
-          <button
-            onClick={() => signIn()}
-            className="flex items-center justify-center gap-2 border border-black bg-black p-2"
-          >
-            <p className="text-base font-normal leading-normal text-white">
+          <button className="flex items-center justify-center gap-2 border border-black bg-black p-2">
+            <Link
+              href={"/api/auth/signin"}
+              className="text-base font-normal leading-normal text-white"
+            >
               Log In
-            </p>
+            </Link>
           </button>
         )}
       </div>
