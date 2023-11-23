@@ -45,7 +45,7 @@ export default async function Navbar() {
           <button className="flex items-center justify-center gap-2 border border-black bg-black p-2">
             <Link
               href={"/api/auth/signin"}
-              className="text-base font-normal leading-normal text-white"
+              className="text-sm font-normal leading-normal text-white"
             >
               Log In
             </Link>

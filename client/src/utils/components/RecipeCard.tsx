@@ -7,9 +7,10 @@ interface RecipeProp {
   title: string;
   id: string;
   description: string;
-  author: {
+  author?: {
     name: string | null;
   };
+  authorId?: string;
 }
 
 export default function RecipeCard({ recipe }: { recipe: RecipeProp }) {
@@ -40,7 +41,7 @@ export default function RecipeCard({ recipe }: { recipe: RecipeProp }) {
       </div>
       <div className="flex w-full items-center justify-start gap-2">
         <p className="font-['Roboto'] text-sm font-semibold leading-[21px] text-black">
-          {recipe.author.name}
+          {recipe.author?.name}
         </p>
         {/* <div className="font-['Roboto'] text-lg font-normal text-black">•</div> */}
         {/* <div className="font-['Roboto'] text-sm font-normal leading-[21px] text-black">
