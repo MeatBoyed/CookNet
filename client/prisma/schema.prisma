@@ -47,6 +47,14 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+model VerificationToken {
+  identifier String   @id @map("_id")
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
 model Session {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
@@ -56,6 +64,7 @@ model Session {
 }
 
 model User {
+  // Core-Data
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   email         String?   @unique
@@ -63,16 +72,44 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  Recipes       Recipe[]
-  Comments      Comment[]
+
+  // Activity-Data
+  Recipes      Recipe[]
+  savedRecipes Save[]
+  following    Follow[]  @relation(name: "UserFollowing")
+  followers    Follow[]  @relation(name: "UserFollowers")
+  Comments     Comment[]
+  likedRecipes Like[]
 }
 
-model VerificationToken {
-  identifier String   @id @map("_id")
-  token      String   @unique
-  expires    DateTime
+model Like {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String @db.ObjectId
+  recipeId String @db.ObjectId
+  user     User   @relation(fields: [userId], references: [id])
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
 
-  @@unique([identifier, token])
+  @@map("likes")
+}
+
+model Save {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String @db.ObjectId
+  recipeId String @db.ObjectId
+  user     User   @relation(fields: [userId], references: [id])
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+  @@map("saves")
+}
+
+model Follow {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  followerId  String @db.ObjectId
+  followingId String @db.ObjectId
+  follower    User   @relation(name: "UserFollowing", fields: [followerId], references: [id])
+  following   User   @relation(name: "UserFollowers", fields: [followingId], references: [id])
+
+  @@map("follows")
 }
 
 model Comment {
@@ -88,11 +125,18 @@ model Comment {
 
 // Recipe Tables
 model Recipe {
+  // Core-Data
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   authorId    String   @db.ObjectId
   title       String
   description String
   steps       String[]
+
+  // Meta-Data
+  likes   Int    @default(0)
+  likedBy Like[]
+  savedBy Save[]
+  // createdAt DateTime @default(now()) 
 
   ingredients IngredientOnRecipe[]
   comments    Comment[]
@@ -104,7 +148,6 @@ model Recipe {
 model Ingredient {
   id          String               @id @default(auto()) @map("_id") @db.ObjectId
   name        String               @unique
-  // quantity    Float
   description String?
   createdAt   DateTime             @default(now())
   recipes     IngredientOnRecipe[]
@@ -113,12 +156,12 @@ model Ingredient {
 }
 
 model IngredientOnRecipe {
-  id          String @id @map("_id") @db.ObjectId @default(auto())
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
   quantity    Float
   measurement String
   optional    Boolean
 
-  ingredientId String @db.ObjectId  
+  ingredientId String     @db.ObjectId
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
 
   recipeId String @db.ObjectId

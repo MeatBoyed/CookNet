@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth";
 import { notFound, redirect } from "next/navigation";
+import { authOptions } from "~/server/auth";
 import { db } from "~/server/db";
 import DeleteRecipeForm from "~/utils/components/Forms/DeleteRecipeForm";
 
@@ -13,7 +14,7 @@ export default async function DeleteRecipePage({
 }: {
   params: { id: string };
 }) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   const recipe = await db.recipe.findUnique({
     where: { id: params.id },
     include: {
