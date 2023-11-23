@@ -49,9 +49,11 @@ export default function CreateRecipeForm({ ingredients }: props) {
 
       // Your existing logic for creating the recipe goes here
       const res = await CreateRecipeEndPoint(formData);
-      if (res.errorMessage == "" && res.id != "") {
-        return router.push(`/recipe/${res.id}`);
-      }
+
+      if (res.errorMessage != "") return setErrorMessage(res.errorMessage);
+      if (res.id != "") return router.push(`/recipe/${res.id}`);
+
+      throw "Internal Error";
     } catch (error) {
       console.error("Error creating recipe:", error);
       setErrorMessage(

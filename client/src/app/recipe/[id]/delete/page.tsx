@@ -1,8 +1,6 @@
 import { notFound } from "next/navigation";
 import { db } from "~/server/db";
-import RecipeCard from "~/utils/components/RecipeCard";
-import Maininfo from "~/utils/components/RecipePage/MainInfo";
-import { StepsRenderer } from "~/utils/components/RecipePage/Step";
+import DeleteRecipeForm from "~/utils/components/Forms/DeleteRecipeForm";
 
 export const metadata = {
   title: "CookNet",
@@ -36,22 +34,7 @@ export default async function DeleteRecipePage({
           Deleting this recipe will permanently remove it.
         </p>
       </div>
-      <div className="px-10">
-        <RecipeCard recipe={recipe} />
-      </div>
-
-      <div className="flex items-center justify-center gap-5">
-        <button className="flex items-center justify-center gap-2 border border-black bg-black p-2">
-          <p className="text-base font-normal leading-normal text-white">
-            Delete
-          </p>
-        </button>
-        <button className="flex items-center justify-center gap-2 border border-black bg-white p-2">
-          <p className="text-base font-normal leading-normal text-black">
-            Back
-          </p>
-        </button>
-      </div>
+      <DeleteRecipeForm recipe={recipe} />
     </div>
   );
 }

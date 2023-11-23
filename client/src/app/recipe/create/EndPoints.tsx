@@ -2,7 +2,11 @@
 import { Prisma } from "@prisma/client";
 import { db } from "~/server/db";
 import { type RecipeFormData } from "~/utils/components/Forms/CreateRecipeForm";
-import { handlePrismaCreateErrors } from "~/utils/lib/PrismaErrorHandler";
+import {
+  handlePrismaCreateErrors,
+  handlePrismaDeleteErrors,
+  handlePrismaUpdateErrors,
+} from "~/utils/lib/PrismaErrorHandler";
 
 export const CreateRecipeEndPoint = async (formData: RecipeFormData) => {
   "use server";
@@ -81,7 +85,7 @@ export const UpdateRecipe = async (formData: RecipeFormData) => {
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       // Handle Prisma-specific errors
-      return { id: "", errorMessage: handlePrismaCreateErrors(error) };
+      return { id: "", errorMessage: handlePrismaUpdateErrors(error) };
     } else {
       // Handle other types of errors or unexpected scenarios
       console.error("Unhandled Error:", error);
@@ -93,15 +97,20 @@ export const UpdateRecipe = async (formData: RecipeFormData) => {
 export const DeleteRecipe = async (id: string) => {
   "use server";
   try {
-    const res = await db.recipe.delete({
-      where: { id: id },
-    });
+    await db.$transaction([
+      db.ingredientOnRecipe.deleteMany({
+        where: { recipeId: id },
+      }),
+      db.recipe.delete({
+        where: { id: id },
+      }),
+    ]);
 
-    return { id: res.id, errorMessage: "" };
+    return { id: "", errorMessage: "" };
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       // Handle Prisma-specific errors
-      return { id: "", errorMessage: handlePrismaCreateErrors(error) };
+      return { id: "", errorMessage: handlePrismaDeleteErrors(error) };
     } else {
       // Handle other types of errors or unexpected scenarios
       console.error("Unhandled Error:", error);
