@@ -1,5 +1,4 @@
 import { db } from "~/server/db";
-import CallToAction from "~/utils/components/CallToAction";
 import CategoriesSection from "~/utils/components/CategoriesSelection";
 import Header from "~/utils/components/Header";
 import RecipeCard from "~/utils/components/RecipeCard";

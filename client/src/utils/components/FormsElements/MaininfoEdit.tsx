@@ -4,7 +4,7 @@ import ProfileThumbnail from "../../../img/ProfileThumbnail.png";
 import ImageThumbnail from "../../../img/ImageThumbnail.png";
 import InputField from "./TextField";
 import { getSession, useSession } from "next-auth/react";
-import { type Dispatch, type SetStateAction, useState } from "react";
+import { type Dispatch, type SetStateAction, useState, useEffect } from "react";
 import { type IngredientOnRecipe, type Ingredient } from "@prisma/client";
 import IngredientsInput from "./IngredientsInput";
 import { type RecipeFormData } from "../Forms/CreateRecipeForm";
@@ -26,8 +26,18 @@ export default function MaininfoEdit({
   setMainInfo,
   ingredients,
 }: props) {
+  const [title, setTitle] = useState<string>(mainInfo.title);
+  const [description, setDescription] = useState<string>(mainInfo.description);
   const { data } = useSession();
   // const [mainInfo, setMainInfo] = useState<MainInfo>(defaultState);
+
+  useEffect(() => {
+    setMainInfo((prev) => ({
+      ...prev,
+      title: title,
+      description: description,
+    }));
+  }, [title, description]);
 
   return (
     <div className="flex w-full flex-col justify-between gap-8 md:flex-row md:gap-10">
@@ -46,20 +56,16 @@ export default function MaininfoEdit({
                 Recipe
               </div>
               <InputField
-                onChange={(newValue) => {
-                  setMainInfo((prev) => ({ ...prev, title: newValue }));
-                }}
-                value={mainInfo.title}
+                text={title}
+                setText={setTitle}
                 size="Large"
                 type="text"
                 name="Title"
                 placeholder="Carrot Cake"
               />
               <InputField
-                value={mainInfo.description}
-                onChange={(newValue) => {
-                  setMainInfo((prev) => ({ ...prev, description: newValue }));
-                }}
+                text={description}
+                setText={setDescription}
                 size="Default"
                 type="text"
                 placeholder="Charles would love a slice"

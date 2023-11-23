@@ -3,7 +3,7 @@ import ImageThumbnail from "../../img/ImageThumbnail.png";
 import { Recipe } from "@prisma/client";
 import Link from "next/link";
 
-interface RecipeProp {
+export interface RecipeProp {
   title: string;
   id: string;
   description: string;

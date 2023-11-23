@@ -1,10 +1,8 @@
 "use client";
 import { type Dispatch, type SetStateAction, useState } from "react";
 import TextField from "~/utils/components/FormsElements/TextField";
-import StepCard from "~/utils/components/RecipePage/StepCard";
 import { type RecipeFormData } from "../Forms/CreateRecipeForm";
 import Step from "../RecipePage/Step";
-import { TiDeleteOutline } from "react-icons/ti";
 
 type props = {
   steps: string[];
@@ -53,11 +51,11 @@ export default function StepsInput({ steps, setFormData }: props) {
         </div>
         <div className="flex flex-col items-center justify-center gap-5 p-4">
           <TextField
-            onChange={(newValue) => setStepInput(newValue)}
+            text={stepInput}
+            setText={setStepInput}
             size="Default"
             type="text"
             placeholder="Add A Step"
-            value={stepInput}
           />
           <button
             onClick={() => {

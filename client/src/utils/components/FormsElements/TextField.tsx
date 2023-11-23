@@ -1,18 +1,20 @@
+import { Dispatch, SetStateAction } from "react";
+
 type props = {
   name?: string;
   type: string;
   size: string;
   placeholder?: string;
-  value?: string;
-  onChange: (newValue: string) => void;
+  text: string;
+  setText: Dispatch<SetStateAction<string>>;
 };
 export default function TextField({
   name,
   type,
   size,
   placeholder,
-  value,
-  onChange,
+  text,
+  setText,
 }: props) {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-2">
@@ -23,9 +25,11 @@ export default function TextField({
         <input
           type={type || "text"}
           id="large-input"
-          value={value}
+          value={text}
           placeholder={placeholder}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => {
+            setText(e.target.value);
+          }}
           className="sm:text-md  w-full rounded-lg border border-gray-300 bg-gray-50 p-4 text-3xl font-bold leading-[41.60px] text-black focus:border-blue-500 focus:ring-blue-500 "
         />
       ) : null}
@@ -34,8 +38,10 @@ export default function TextField({
           type={type || "text"}
           id="default-input"
           placeholder={placeholder}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
+          value={text}
+          onChange={(e) => {
+            setText(e.target.value);
+          }}
           className="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-base font-normal leading-normal text-black  focus:border-blue-500 focus:ring-blue-500"
         />
       ) : null}
@@ -43,8 +49,10 @@ export default function TextField({
         <input
           type={type || "text"}
           placeholder={placeholder}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
+          value={text}
+          onChange={(e) => {
+            setText(e.target.value);
+          }}
           className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:text-xs"
         />
       ) : null}

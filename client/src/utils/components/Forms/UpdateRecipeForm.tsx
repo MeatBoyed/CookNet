@@ -2,7 +2,7 @@
 import { type Ingredient } from "@prisma/client";
 import MaininfoEdit, { type MainInfo } from "../FormsElements/MaininfoEdit";
 import StepsInput from "../FormsElements/StepsInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UpdateRecipe } from "~/app/recipe/create/EndPoints";
 import { useRouter } from "next/navigation";
 import Spinner from "../Loading";
@@ -32,6 +32,10 @@ export default function UpdateRecipeForm({ recipe, ingredients }: props) {
     steps: recipe.steps,
     recipeId: recipe.id,
   });
+
+  useEffect(() => {
+    setFormData((prev) => ({ ...prev, mainInfo: mainInfo }));
+  }, [mainInfo]);
 
   const handleSubmit = async () => {
     setErrorMessage("");

@@ -1,7 +1,7 @@
 "use client";
 
 import { TiDeleteOutline } from "react-icons/ti";
-import { type Dispatch, type SetStateAction, useState } from "react";
+import { type Dispatch, type SetStateAction, useState, useEffect } from "react";
 import InputField from "./TextField";
 import { type IngredientOnRecipe, type Ingredient } from "@prisma/client";
 import NumberInput from "./NumberInput";
@@ -31,13 +31,18 @@ export default function IngredientsInput({
   setMainInfo,
 }: props) {
   // Currently Selected Ingredient
+  const [quantity, setQuantity] = useState<number>(0);
   const [selectedIngredient, setSelectedIngredient] =
     useState<IngredientOnRecipe>(DefaultState);
+
+  useEffect(() => {
+    setSelectedIngredient((prev) => ({ ...prev, quantity: quantity }));
+  }, [quantity]);
 
   return (
     <div className="flex w-full flex-col justify-center gap-5">
       {/* Display Selected Ingredients */}
-      <div className="flex items-center justify-start">
+      <div className="flex flex-wrap items-center justify-start gap-3">
         {selectedIngredients.map((ingredient, index) => (
           <button
             key={index}
@@ -72,16 +77,13 @@ export default function IngredientsInput({
         {/* Header */}
         <div className="flex w-full flex-col items-center justify-center gap-5 ">
           <InputField
-            onChange={() => null}
             placeholder="Search Ingredients"
             size="Small"
             type="text"
           />
           <NumberInput
-            onChange={(newValue) =>
-              setSelectedIngredient((prev) => ({ ...prev, quantity: newValue }))
-            }
-            value={selectedIngredient.quantity}
+            number={quantity}
+            setNumber={setQuantity}
             placeholder="Quantity"
             size="Small"
             type="number"
