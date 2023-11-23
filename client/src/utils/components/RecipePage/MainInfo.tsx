@@ -1,6 +1,13 @@
 import Image from "next/image";
 import ImageThumbnail from "../../../img/ImageThumbnail.png";
 import { type Ingredient, type Recipe, type User } from "@prisma/client";
+import {
+  MdOutlineDeleteOutline,
+  MdOutlineModeEditOutline,
+} from "react-icons/md";
+import { getServerSession } from "next-auth";
+import { authOptions } from "~/server/auth";
+import Link from "next/link";
 
 interface props {
   recipe: Recipe;
@@ -15,7 +22,8 @@ interface props {
     recipeId: string;
   })[];
 }
-export default function Maininfo({ recipe, author, ingredients }: props) {
+export default async function Maininfo({ recipe, author, ingredients }: props) {
+  const session = await getServerSession(authOptions);
   return (
     <div className="flex w-full flex-col justify-between gap-8 md:flex-row">
       <Image
@@ -27,7 +35,17 @@ export default function Maininfo({ recipe, author, ingredients }: props) {
       />
       <div className="flex w-full flex-col gap-5">
         <div className="flex flex-col items-start justify-start gap-3">
-          <div className="flex flex-col items-start justify-center gap-2">
+          {session?.user.id == author.id && (
+            <div className="flex w-full items-start justify-start gap-4 ">
+              <Link href={`/recipe/${recipe.id}/edit`}>
+                <MdOutlineModeEditOutline size={20} />
+              </Link>
+              <Link href={`/recipe/${recipe.id}/delete`}>
+                <MdOutlineDeleteOutline size={20} />
+              </Link>
+            </div>
+          )}
+          <div className="flex flex-col items-start justify-center gap-1">
             <p className="text-sm font-semibold text-black">Meal</p>
             <p className="text-3xl font-bold  text-black">{recipe.title}</p>
             <p className="text-base font-normal leading-normal text-black">

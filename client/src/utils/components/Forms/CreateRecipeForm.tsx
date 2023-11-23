@@ -71,18 +71,18 @@ export default function CreateRecipeForm({ ingredients }: props) {
           onClick={() => router.back()}
           className="flex items-center justify-center gap-2 border border-black px-5 py-2"
         >
-          <div className="text-base font-normal leading-normal text-black">
+          <p className="text-base font-normal leading-normal text-black">
             Go Back
-          </div>
+          </p>
         </button>
         <button
           disabled={isLoading}
           onClick={() => handleSubmit()}
           className="flex items-center justify-center gap-2 border border-black bg-black px-5 py-2"
         >
-          <div className="text-base font-normal leading-normal text-white">
+          <p className="text-base font-normal leading-normal text-white">
             Create
-          </div>
+          </p>
         </button>
       </div>
       {isLoading ? (
