@@ -8,6 +8,7 @@ import {
 import { getServerSession } from "next-auth";
 import { authOptions } from "~/server/auth";
 import Link from "next/link";
+import { FaRegHeart } from "react-icons/fa";
 
 interface props {
   recipe: Recipe;
@@ -45,21 +46,40 @@ export default async function Maininfo({ recipe, author, ingredients }: props) {
               </Link>
             </div>
           )}
-          <div className="flex flex-col items-start justify-center gap-1">
-            <p className="text-sm font-semibold text-black">Meal</p>
-            <p className="text-3xl font-bold  text-black">{recipe.title}</p>
-            <p className="text-base font-normal leading-normal text-black">
-              {recipe.description}
-            </p>
-          </div>
+          <div className="flex flex-col items-start justify-center gap-4 ">
+            <div className="flex flex-col items-start justify-center gap-1">
+              <p className="text-sm font-semibold text-black">Meal</p>
+              <p className="text-3xl font-bold  text-black">{recipe.title}</p>
+              <p className="text-base font-normal leading-normal text-black">
+                {recipe.description}
+              </p>
+            </div>
 
-          <div className="flex items-center justify-center gap-1">
-            <p className="text-sm font-semibold leading-[21px] text-black">
-              Created By:
-            </p>
-            <p className="text-sm font-normal leading-[21px] text-black">
-              {author.name}
-            </p>
+            <div className="flex items-center justify-center gap-1">
+              <p className="text-sm font-semibold leading-[21px] text-black">
+                Created By:
+              </p>
+              <Link
+                href={`/user/${author.id}`}
+                className="text-sm font-normal leading-[21px] text-black underline"
+              >
+                {author.name}
+              </Link>
+            </div>
+            <div className="flex items-center justify-center gap-10">
+              <button className="flex w-full items-center justify-center gap-2 border border-black bg-black px-2 py-2">
+                <p className="text-sm font-normal leading-normal text-white">
+                  Add to Cook Book
+                </p>
+              </button>
+              <div className="flex items-center justify-center gap-3">
+                <p className="text-base font-normal leading-normal text-black">
+                  34
+                </p>
+
+                <FaRegHeart size={20} />
+              </div>
+            </div>
           </div>
         </div>
         <div className="h-px w-full bg-black" />
