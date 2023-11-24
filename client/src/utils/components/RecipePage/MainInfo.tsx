@@ -1,6 +1,12 @@
 import Image from "next/image";
 import ImageThumbnail from "../../../img/ImageThumbnail.png";
-import { type Ingredient, type Recipe, type User } from "@prisma/client";
+import {
+  Like,
+  type Ingredient,
+  type Recipe,
+  type User,
+  Save,
+} from "@prisma/client";
 import {
   MdOutlineDeleteOutline,
   MdOutlineModeEditOutline,
@@ -9,6 +15,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "~/server/auth";
 import Link from "next/link";
 import { FaRegHeart } from "react-icons/fa";
+import { UpdateSavedRecipes } from "~/app/recipe/EndPoints";
+import { redirect } from "next/navigation";
+import ActivityButtons from "./ActivityButtons";
 
 interface props {
   recipe: Recipe;
@@ -22,9 +31,18 @@ interface props {
     ingredientId: string;
     recipeId: string;
   })[];
+  LikedBy: Like[];
+  SavedBy: Save[];
 }
-export default async function Maininfo({ recipe, author, ingredients }: props) {
+export default async function Maininfo({
+  recipe,
+  author,
+  ingredients,
+  LikedBy,
+  SavedBy,
+}: props) {
   const session = await getServerSession(authOptions);
+
   return (
     <div className="flex w-full flex-col justify-between gap-8 md:flex-row">
       <Image
@@ -66,20 +84,12 @@ export default async function Maininfo({ recipe, author, ingredients }: props) {
                 {author.name}
               </Link>
             </div>
-            <div className="flex items-center justify-center gap-10">
-              <button className="flex w-full items-center justify-center gap-2 border border-black bg-black px-2 py-2">
-                <p className="text-sm font-normal leading-normal text-white">
-                  Add to Cook Book
-                </p>
-              </button>
-              <div className="flex items-center justify-center gap-3">
-                <p className="text-base font-normal leading-normal text-black">
-                  34
-                </p>
-
-                <FaRegHeart size={20} />
-              </div>
-            </div>
+            <ActivityButtons
+              likes={recipe.likes}
+              LikedBy={LikedBy}
+              SavedBy={SavedBy}
+              recipeId={recipe.id}
+            />
           </div>
         </div>
         <div className="h-px w-full bg-black" />

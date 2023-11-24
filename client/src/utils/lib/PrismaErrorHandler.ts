@@ -92,3 +92,33 @@ export const handlePrismaDeleteErrors = (
       return "An unexpected error occurred. Please try again later or contact support.";
   }
 };
+
+export const handlePrismaUpdateSavedRecipes = (
+  error: Prisma.PrismaClientKnownRequestError,
+) => {
+  switch (error.code) {
+    case "P2002":
+      // Unique Constraint Violation
+      return "Unique Constraint Violation: Ensure that you're not creating duplicate relationships.";
+      // Handle the error as needed for your application
+      break;
+
+    case "P2014":
+      // Foreign Key Constraint Violation
+      return "Foreign Key Constraint Violation: Ensure that the referenced records (user or recipe) exist before attempting to create the relationship.";
+      // Handle the error as needed for your application
+      break;
+
+    case "P2018":
+    case "P2019":
+      // Invalid Input Value
+      return "Invalid Input Value: Validate input data before sending it to Prisma, and provide clear validation messages.";
+      // Handle the error as needed for your application
+      break;
+
+    default:
+      // Generic error handling for unexpected errors
+      return "Unexpected Error: Implement a generic error handling mechanism to log and notify administrators about unexpected errors.";
+    // Handle the error as needed for your application
+  }
+};
