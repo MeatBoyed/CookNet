@@ -20,6 +20,8 @@ export default async function RecipePage({
       ingredients: {
         include: { ingredient: true },
       },
+      savedBy: true,
+      likedBy: true,
     },
   });
 
@@ -31,6 +33,8 @@ export default async function RecipePage({
         recipe={recipe}
         ingredients={recipe.ingredients}
         author={recipe.author}
+        SavedBy={recipe.savedBy}
+        LikedBy={recipe.likedBy}
       />
       <StepsRenderer steps={recipe.steps} />
     </div>

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Spinner from "../Loading";
 import RecipeCard, { type RecipeProp } from "../RecipeCard";
-import { DeleteRecipe } from "~/app/recipe/EndPoints";
+import { DeleteRecipe } from "~/utils/lib/EndPoints";
 import { useSession } from "next-auth/react";
 
 interface props {

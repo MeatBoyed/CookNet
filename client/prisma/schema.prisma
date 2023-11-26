@@ -94,8 +94,8 @@ model Like {
 
 model Save {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
-  userId   String @db.ObjectId
-  recipeId String @db.ObjectId
+  userId   String @db.ObjectId @unique
+  recipeId String @db.ObjectId @unique
   user     User   @relation(fields: [userId], references: [id])
   recipe   Recipe @relation(fields: [recipeId], references: [id])
 

@@ -1,11 +1,11 @@
 import Image from "next/image";
 import ImageThumbnail from "../../../img/ImageThumbnail.png";
 import {
-  Like,
+  type Like,
   type Ingredient,
   type Recipe,
   type User,
-  Save,
+  type Save,
 } from "@prisma/client";
 import {
   MdOutlineDeleteOutline,
@@ -14,10 +14,7 @@ import {
 import { getServerSession } from "next-auth";
 import { authOptions } from "~/server/auth";
 import Link from "next/link";
-import { FaRegHeart } from "react-icons/fa";
-import { UpdateSavedRecipes } from "~/app/recipe/EndPoints";
-import { redirect } from "next/navigation";
-import ActivityButtons from "./ActivityButtons";
+import ActivityButtonsContainer from "./ActivityButtonsContainer";
 
 interface props {
   recipe: Recipe;
@@ -84,10 +81,10 @@ export default async function Maininfo({
                 {author.name}
               </Link>
             </div>
-            <ActivityButtons
+            <ActivityButtonsContainer
               likes={recipe.likes}
-              LikedBy={LikedBy}
-              SavedBy={SavedBy}
+              likedBy={LikedBy}
+              savedBy={SavedBy}
               recipeId={recipe.id}
             />
           </div>

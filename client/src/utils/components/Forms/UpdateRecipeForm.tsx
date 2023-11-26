@@ -3,7 +3,7 @@ import { type Ingredient } from "@prisma/client";
 import MaininfoEdit, { type MainInfo } from "../FormsElements/MaininfoEdit";
 import StepsInput from "../FormsElements/StepsInput";
 import { useEffect, useState } from "react";
-import { UpdateRecipe } from "~/app/recipe/EndPoints";
+import { UpdateRecipe } from "~/utils/lib/EndPoints";
 import { useRouter } from "next/navigation";
 import Spinner from "../Loading";
 import { useSession } from "next-auth/react";
