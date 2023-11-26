@@ -3,7 +3,6 @@
 import { type Save } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import router from "next/router";
 import { useEffect, useState } from "react";
 import {
   RemoveRecipeFromSaved,
@@ -25,9 +24,7 @@ export function SaveRecipeBtn({
 
   useEffect(() => {
     savedBy.find((saved) => {
-      if (saved.userId == data?.user.id) {
-        setIsSavedByUser(true);
-      }
+      if (saved.userId == data?.user.id) setIsSavedByUser(true);
     });
   }, [data, savedBy]);
 
@@ -37,7 +34,7 @@ export function SaveRecipeBtn({
       setIsLoading(true);
 
       // Ensure user is Authed
-      if (!data?.user) throw new Error("Please Login to Save the Recipe");
+      if (!data?.user) return router.push("/api/auth/signin");
 
       // Your existing logic for creating the recipe goes here
       const res = await UpdateSavedRecipes(data?.user.id, recipeId);

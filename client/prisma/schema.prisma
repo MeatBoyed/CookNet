@@ -84,8 +84,8 @@ model User {
 
 model Like {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
-  userId   String @db.ObjectId
-  recipeId String @db.ObjectId
+  userId   String @db.ObjectId @unique
+  recipeId String @db.ObjectId @unique
   user     User   @relation(fields: [userId], references: [id])
   recipe   Recipe @relation(fields: [recipeId], references: [id])
 
@@ -133,7 +133,6 @@ model Recipe {
   steps       String[]
 
   // Meta-Data
-  likes   Int    @default(0)
   likedBy Like[]
   savedBy Save[]
   // createdAt DateTime @default(now()) 

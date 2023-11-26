@@ -82,7 +82,6 @@ export default async function Maininfo({
               </Link>
             </div>
             <ActivityButtonsContainer
-              likes={recipe.likes}
               likedBy={LikedBy}
               savedBy={SavedBy}
               recipeId={recipe.id}
