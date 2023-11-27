@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import ImageThumbnail from "../../../img/ImageThumbnail.png";
 import {
@@ -11,10 +12,10 @@ import {
   MdOutlineDeleteOutline,
   MdOutlineModeEditOutline,
 } from "react-icons/md";
-import { getServerSession } from "next-auth";
-import { authOptions } from "~/server/auth";
 import Link from "next/link";
 import ActivityButtonsContainer from "./ActivityButtonsContainer";
+import { useSession } from "next-auth/react";
+import { generateImage } from "~/utils/lib/AIEndPoints";
 
 interface props {
   recipe: Recipe;
@@ -31,14 +32,15 @@ interface props {
   LikedBy: Like[];
   SavedBy: Save[];
 }
-export default async function Maininfo({
+export default function Maininfo({
   recipe,
   author,
   ingredients,
   LikedBy,
   SavedBy,
 }: props) {
-  const session = await getServerSession(authOptions);
+  // const session = await getServerSession(authOptions);
+  const { data } = useSession();
 
   return (
     <div className="flex w-full flex-col justify-between gap-8 md:flex-row">
@@ -51,7 +53,13 @@ export default async function Maininfo({
       />
       <div className="flex w-full flex-col gap-5">
         <div className="flex flex-col items-start justify-start gap-3">
-          {session?.user.id == author.id && (
+          <button
+            className="border-2 border-black px-5 py-2"
+            onClick={() => generateImage()}
+          >
+            Generate
+          </button>
+          {data?.user.id == author.id && (
             <div className="flex w-full items-start justify-start gap-4 ">
               <Link href={`/recipe/${recipe.id}/edit`}>
                 <MdOutlineModeEditOutline size={20} />
