@@ -15,7 +15,7 @@ export default async function UserPage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
   const user = await db.user.findUnique({
     where: { id: params.id },
-    include: { Recipes: true },
+    include: { Recipes: true, savedRecipes: { include: { recipe: true } } },
   });
 
   if (!user) return notFound();
@@ -35,17 +35,18 @@ export default async function UserPage({ params }: { params: { id: string } }) {
           className="flex w-full flex-col items-start justify-center gap-5"
         >
           <div className="flex w-full items-center justify-between">
-            <p className="text-lg font-bold  text-black">Favourites</p>
+            <p className="text-lg font-bold  text-black">Cook Book</p>
             <Link
-              href={`/user/favourites`}
+              href={`/user/cookbook`}
               className="text-sm font-normal text-black"
             >
               View All
             </Link>
           </div>
           <div className="grid w-full grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:grid-cols-4">
-            {user.Recipes.map((recipe, index) => {
-              if (index < 4) return <RecipeCard recipe={recipe} key={index} />;
+            {user.savedRecipes.map((saved, index) => {
+              if (index < 4)
+                return <RecipeCard recipe={saved.recipe} key={index} />;
             })}
           </div>
         </section>
