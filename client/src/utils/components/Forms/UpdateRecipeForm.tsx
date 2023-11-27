@@ -17,7 +17,6 @@ interface props {
 
 export default function UpdateRecipeForm({ recipe, ingredients }: props) {
   const router = useRouter();
-  const { data } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 

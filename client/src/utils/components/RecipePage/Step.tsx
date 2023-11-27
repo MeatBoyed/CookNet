@@ -1,9 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
 import { TiDeleteOutline } from "react-icons/ti";
+import { CheckBox } from "../FormsElements/Checkbox";
 
-export const StepsRenderer = ({ steps }: { steps: string[] }) => {
-  const [expandAll, setExpandAll] = useState<boolean>(false);
+export const StepsRenderer = ({
+  steps,
+  isCooking,
+  expand,
+}: {
+  steps: string[];
+  isCooking?: boolean;
+  expand?: boolean;
+}) => {
+  const [expandAll, setExpandAll] = useState<boolean>(expand ?? false);
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="flex items-center justify-between">
@@ -23,6 +32,7 @@ export const StepsRenderer = ({ steps }: { steps: string[] }) => {
           content={step}
           key={index}
           openStep={expandAll}
+          isCooking={isCooking}
         />
       ))}
     </div>
@@ -34,11 +44,13 @@ const Step = ({
   content,
   openStep,
   removeStep,
+  isCooking,
 }: {
   stepNo: number;
   content: string;
   openStep: boolean;
   removeStep?: (step: string) => void;
+  isCooking?: boolean;
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(openStep);
 
@@ -71,11 +83,12 @@ const Step = ({
         </svg>
       </div>
       {isOpen && (
-        <div className="flex items-center justify-between p-4">
+        <div className="flex items-center justify-between p-2">
           <p className="font-base text-gray-900">{content}</p>
           {removeStep && (
             <TiDeleteOutline size={30} onClick={() => removeStep(content)} />
           )}
+          {isCooking && <CheckBox />}
         </div>
       )}
     </div>

@@ -85,9 +85,9 @@ export function SaveRecipeBtn({
       </p>
       <button
         onClick={() => (isSavedByUser ? removeRecipe() : saveRecipe())}
-        className="flex w-full items-center justify-center gap-2 border border-black bg-black px-2 py-2"
+        className="flex w-full items-center justify-center gap-2 border border-black px-2 py-2"
       >
-        <p className="text-sm font-normal leading-normal text-white">
+        <p className="text-sm font-normal leading-normal text-black">
           {isLoading ? (
             "Saving..."
           ) : (
