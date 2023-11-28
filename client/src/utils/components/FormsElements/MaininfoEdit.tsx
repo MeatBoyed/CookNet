@@ -3,11 +3,11 @@ import Image from "next/image";
 import ProfileThumbnail from "../../../img/ProfileThumbnail.png";
 import ImageThumbnail from "../../../img/ImageThumbnail.png";
 import InputField from "./TextField";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { type Dispatch, type SetStateAction, useState, useEffect } from "react";
 import { type IngredientOnRecipe, type Ingredient } from "@prisma/client";
 import IngredientsInput from "./IngredientsInput";
-import { type RecipeFormData } from "../Forms/CreateRecipeForm";
+import { VscWand } from "react-icons/vsc";
 
 type props = {
   mainInfo: MainInfo;
@@ -29,7 +29,6 @@ export default function MaininfoEdit({
   const [title, setTitle] = useState<string>(mainInfo.title);
   const [description, setDescription] = useState<string>(mainInfo.description);
   const { data } = useSession();
-  // const [mainInfo, setMainInfo] = useState<MainInfo>(defaultState);
 
   useEffect(() => {
     setMainInfo((prev) => ({
@@ -39,22 +38,37 @@ export default function MaininfoEdit({
     }));
   }, [title, description]);
 
+  // [
+
+  //   "https://replicate.delivery/pbxt/J1iGezYfahnWwEVryI6dHhi6E57KpZ4jeJKzXd1UWGocxq5jA/out-0.png"
+
+  // ]
+
   return (
     <div className="flex w-full flex-col justify-between gap-8 md:flex-row md:gap-10">
-      <Image
-        className="flex h-[300px] w-[400px]"
-        height={300}
-        width={400}
-        src={ImageThumbnail}
-        alt="Recipe Thumbnail"
-      />
+      <div className="relative">
+        <Image
+          className="h-full w-full"
+          height={300}
+          width={400}
+          src={ImageThumbnail}
+          alt="Recipe Thumbnail"
+        />
+        <button className="absolute bottom-0 right-0 mb-2 mr-3 flex cursor-pointer items-center justify-center  gap-2 rounded-full bg-black px-3 py-2 text-white">
+          <p className="text-xl font-semibold leading-[21px]">AI</p>
+          <VscWand size={25} />
+        </button>
+        {/* <button className="absolute left-0 top-0 h-full w-full cursor-pointer bg-transparent opacity-0 hover:bg-black hover:text-white hover:opacity-75">
+          Hover to see button
+        </button> */}
+      </div>
       <div>
         <div className="flex w-full flex-col gap-5">
           <div className="flex w-full flex-col items-start justify-start gap-12">
             <div className="flex w-full flex-col items-start justify-center gap-5">
-              <div className="w-full text-sm font-semibold leading-[21px] text-black">
+              <p className="w-full text-sm font-semibold leading-[21px] text-black">
                 Recipe
-              </div>
+              </p>
               <InputField
                 text={title}
                 setText={setTitle}

@@ -1,32 +1,40 @@
 "use server";
 import { env } from "~/env.mjs";
+import Replicate from "replicate";
 
-export const generateImage = async () => {
+export const generateImage = async (title: string) => {
   "use server";
-  // const response = await fetch("/api/predictions", {
-  //   method: "POST",
-  //   body: JSON.stringify({ prompt: "YEssir" }),
-  // });
-  // console.log(response);
 
-  console.log(env.REPLICATE_API_TOKEN);
-  const response = await fetch("https://api.replicate.com/v1/predictions", {
-    method: "POST",
-    headers: {
-      Authorization: `Token ${env.REPLICATE_API_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      // Pinned to a specific version of Stable Diffusion
-      // See https://replicate.com/stability-ai/sdxl
-      version:
-        "2b017d9b67edd2ee1401238df49d75da53c523f36e363881e057f5dc3ed3c5b2",
+  const replicate = new Replicate({ auth: env.REPLICATE_API_TOKEN });
 
-      // This is the text prompt that will be submitted by a form on the frontend
-      input: { prompt: "Realistic Cheese Cake" },
-    }),
+  const prompt = `Create a photorealistic image of a plate of ${title} on a kitchen counter. The plate should be round and made of Ceramic. The ${title} shoult be arranged centered. The kitchen counter should be marble and have with appliances. The lighting should be natural light.`;
+
+  const model =
+    "stability-ai/sdxl:2b017d9b67edd2ee1401238df49d75da53c523f36e363881e057f5dc3ed3c5b2";
+  const input = { prompt: prompt };
+  // Evalute return type
+  const prediction: string[] | object = await replicate.run(model, {
+    input,
   });
 
-  const prediction: unknown = await response.json();
-  console.log(prediction);
+  return prediction;
+
+  // const output = await replicate.run(
+  //   "",
+  //   {
+  //     input: {
+  //       width: 1024,
+  //       height: 1024,
+  //       prompt: "Realist Carrot Cake",
+  //       refine: "no_refiner",
+  //       scheduler: "DDIM",
+  //       num_outputs: 1,
+  //       guidance_scale: 7.5,
+  //       high_noise_frac: 0.8,
+  //       negative_prompt: "",
+  //       prompt_strength: 0.8,
+  //       num_inference_steps: 50,
+  //     },
+  //   },
+  // );
 };
