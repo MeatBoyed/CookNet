@@ -8,11 +8,14 @@ export default function Home() {
         Today's Top Picks
       </h1>
 
-      <div className="flex justify-start items-center flex-wrap gap-5">
+      <section
+        id="Recipes"
+        className="grid w-full grid-cols-1 gap-x-4 gap-y-10 lg:grid-cols-3 md:grid-cols-2"
+      >
         <RecipeCard />
         <RecipeCard />
         <RecipeCard />
-      </div>
+      </section>
     </main>
   );
 }

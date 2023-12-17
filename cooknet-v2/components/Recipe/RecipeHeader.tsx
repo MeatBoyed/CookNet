@@ -14,8 +14,8 @@ export default function RecipeHeader() {
       <Image src={CheeseBurger} alt="Thumbnail" className="w-full" />
       <RecipeMetaData />
       <div className="flex flex-col justify-center items-start gap-8">
-        <div className="flex justify-center items-center gap-2 flex-col">
-          <h1 className="text-4xl font-extrabold tracking-widest text-center">
+        <div className="flex justify-center items-start gap-2 flex-col">
+          <h1 className="text-4xl font-extrabold tracking-widest">
             Alien Cheese Burger
           </h1>
           <p className="">

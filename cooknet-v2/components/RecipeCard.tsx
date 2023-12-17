@@ -38,8 +38,6 @@ export default function RecipeCard() {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex justify-start items-start gap-2 p-3 flex-wrap">
-        <Badge variant={"default"}>Cheese</Badge>
-        <Badge variant={"outline"}>Pickles</Badge>
         <Badge variant={"secondary"}>Beef Patty</Badge>
         <Badge variant={"secondary"}>Beef Patty</Badge>
         <Badge variant={"secondary"}>Beef Patty</Badge>
