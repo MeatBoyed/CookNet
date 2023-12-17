@@ -10,12 +10,12 @@ import {
 import CheeseBurger from "../public/Alien Cheesburger.png";
 import { Badge } from "./ui/badge";
 import Link from "next/link";
-import { Dot } from "lucide-react";
+import { Dot, Heart, HeartIcon } from "lucide-react";
 
 export default function RecipeCard() {
   return (
     <Card>
-      <Image src={CheeseBurger} alt="Thumbnail" className="w-full h-64" />
+      <Image src={CheeseBurger} alt="Thumbnail" className="w-full" />
       <CardHeader className="p-3">
         <div className="flex justify-start items-center">
           <Link href="/" className="text-xs">
@@ -23,6 +23,11 @@ export default function RecipeCard() {
           </Link>
           <Dot />
           <p className="text-xs">21/3/23</p>
+          <Dot />
+          <div className="flex justify-center items-center gap-1">
+            <Heart size={15} className="text-red-500" />
+            <p className="text-xs">3</p>
+          </div>
         </div>
         <Link href="/charles/cheese">
           <CardTitle>Alien Cheeseburger</CardTitle>

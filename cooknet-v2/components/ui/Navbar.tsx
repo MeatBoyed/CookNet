@@ -4,7 +4,7 @@ import { Button } from "./button";
 export default function Navbar() {
   const session = false;
   return (
-    <nav className="flex w-full items-center justify-between border shadow-inner px-5 py-2">
+    <nav className="flex w-full items-center justify-between border shadow-inner px-10 py-2">
       <Link href="/" className="text-2xl font-bold leading-normal">
         CookNet
       </Link>
