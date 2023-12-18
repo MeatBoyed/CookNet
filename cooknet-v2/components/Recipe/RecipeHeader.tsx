@@ -1,5 +1,3 @@
-import CheeseBurger from "../../public/Alien Cheesburger.png";
-import Image from "next/image";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import RecipeMetaData from "../RecipeMetaData";
@@ -11,9 +9,8 @@ export default function RecipeHeader() {
       id="Header"
       className="flex flex-col justify-center items-start gap-2"
     >
-      <Image src={CheeseBurger} alt="Thumbnail" className="w-full" />
-      <RecipeMetaData />
       <div className="flex flex-col justify-center items-start gap-8">
+        <RecipeMetaData />
         <div className="flex justify-center items-start gap-2 flex-col">
           <h1 className="text-4xl font-extrabold tracking-widest">
             Alien Cheese Burger
