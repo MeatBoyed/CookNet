@@ -1,20 +1,24 @@
 import RecipeCard from "@/components/RecipeCard";
+import UserHeader from "@/components/User/UserHeader";
+import UserRecipeRender from "@/components/User/UserRecipeRender";
 
 export default function User() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-10 gap-10">
-      {/* <Button>Hello See Me</Button> */}
-      <h1 className="text-4xl font-extrabold tracking-widest text-center">
-        Charles Rossouw's Profile
-      </h1>
+    <main className="flex min-h-screen flex-col items-center justify-start p-10 gap-10">
+      <UserHeader />
 
-      <p>Your Recipes</p>
-
-      <div className="flex justify-start items-center flex-wrap gap-5">
-        <RecipeCard />
-        <RecipeCard />
-        <RecipeCard />
-      </div>
+      <UserRecipeRender />
+      {/* <section
+        id="Ingredients"
+        className="flex flex-col justify-center items-start gap-3 w-full"
+      >
+        <p className="text-base font-semibold tracking-widest">Cook Book</p>
+        <div className="grid w-full grid-cols-1 gap-x-4 gap-y-10 lg:grid-cols-3 md:grid-cols-2">
+          <RecipeCard />
+          <RecipeCard />
+          <RecipeCard />
+        </div>
+      </section> */}
     </main>
   );
 }
