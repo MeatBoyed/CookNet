@@ -13,7 +13,7 @@ export default function User() {
         className="flex flex-col justify-center items-start gap-3 w-full"
       >
         <p className="text-base font-semibold tracking-widest">Cook Book</p>
-        <div className="grid w-full grid-cols-1 gap-x-4 gap-y-10 lg:grid-cols-3 md:grid-cols-2">
+        <div className="">
           <RecipeCard />
           <RecipeCard />
           <RecipeCard />

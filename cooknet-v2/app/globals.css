@@ -57,3 +57,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+.customCheckbox {
+  filter: sepia(100%) brightness(80%) hue-rotate(170deg) saturate(70%)
+    contrast(300%);
+}

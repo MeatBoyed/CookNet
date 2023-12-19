@@ -1,7 +1,11 @@
-import Ingredient from "../ui/Ingredient";
+import Ingredient, { TypeIngredient } from "../ui/Ingredient";
 import { Badge } from "../ui/badge";
 
-export default function Ingredients() {
+export default function Ingredients({
+  ingredients,
+}: {
+  ingredients: TypeIngredient[];
+}) {
   return (
     <section
       id="Ingredients"
@@ -9,14 +13,9 @@ export default function Ingredients() {
     >
       <p className="text-base font-semibold tracking-widest">Ingredients</p>
       <div className="flex justify-start items-start gap-2 flex-wrap w-full">
-        <Ingredient name="Large Eggs" quantity={3} />
-        <Ingredient name="Large Eggs" quantity={3} optional />
-        <Ingredient name="Large Eggs" quantity={3} />
-        <Ingredient name="Large Eggs" quantity={3} />
-        <Ingredient name="Large Eggs" quantity={3} />
-        <Ingredient name="Large Eggs" quantity={3} />
-        <Ingredient name="Large Eggs" quantity={3} />
-        <Ingredient name="Large Eggs" quantity={3} />
+        {ingredients.map((ingredient, index) => (
+          <Ingredient key={index} props={ingredient} />
+        ))}
       </div>
     </section>
   );

@@ -1,15 +1,21 @@
+import { object, z } from "zod";
 import { Badge } from "./badge";
+import { measurementSchema } from "@/lib/utils";
 
-interface Ingredient {
-  quantity: number;
-  name: string;
-  optional?: boolean;
-}
+export const IngredientSchema = object({
+  name: z.string(),
+  quantity: z.coerce.number(),
+  measurement: measurementSchema,
+  optional: z.boolean(),
+});
 
-export default function Ingredient({ quantity, name, optional }: Ingredient) {
+export type TypeIngredient = z.infer<typeof IngredientSchema>;
+
+export default function Ingredient({ props }: { props: TypeIngredient }) {
   return (
     <Badge variant={"secondary"} className="p-3 ">
-      {quantity} {name} {optional && "(Optional)"}
+      {props.quantity} {props.measurement} {props.name}{" "}
+      {props.optional && "(Optional)"}
     </Badge>
   );
 }
