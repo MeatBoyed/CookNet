@@ -148,7 +148,9 @@ export default function IngredientsInputDialog({
               </Button>
               <SheetFooter>
                 <SheetClose asChild>
-                  <Button type="submit">Close</Button>
+                  <Button variant={"outline"} type="submit">
+                    Close
+                  </Button>
                 </SheetClose>
               </SheetFooter>
             </div>

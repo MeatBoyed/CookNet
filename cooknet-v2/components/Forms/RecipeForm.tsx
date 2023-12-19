@@ -9,6 +9,7 @@ import IngredientsInputDialog from "./IngredientsInputDialog";
 import Ingredients from "../Recipe/Ingredients";
 import { useState } from "react";
 import { TypeIngredient } from "../ui/Ingredient";
+import StepsInput from "./StepsInput";
 
 export default function RecipeForm() {
   const [ingredients, setIngredients] = useState<TypeIngredient[]>([]);
@@ -51,7 +52,7 @@ export default function RecipeForm() {
           />
         </div>
 
-        {/* <Steps /> */}
+        <StepsInput />
       </div>
     </form>
   );
