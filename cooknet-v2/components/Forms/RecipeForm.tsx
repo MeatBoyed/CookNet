@@ -17,7 +17,7 @@ export default function RecipeForm() {
 
   return (
     <form className="flex min-h-screen flex-col items-start justify-between p-10 gap-10 lg:flex-row ">
-      <ActionButtons />
+      <ActionButtons variant="Create" />
       <Image
         width={500}
         height={500}
@@ -27,7 +27,7 @@ export default function RecipeForm() {
       />
       <div className="w-full flex justify-center items-start flex-col gap-10">
         <div className="w-full flex flex-col justify-center items-start gap-8">
-          <div className="w-full flex justify-center items-start gap-2 flex-col">
+          <div className="w-full flex justify-center items-start gap-3 flex-col">
             <Input
               type="text"
               id="Name"

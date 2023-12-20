@@ -9,6 +9,8 @@ import {
 } from "../ui/accordion";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
+import { Checkbox } from "../ui/checkbox";
+import { AccordionHeader } from "@radix-ui/react-accordion";
 
 const steps = [
   "Cut the alien meat into thin patties and season them with salt, pepper, and alien spices.",
@@ -22,7 +24,8 @@ const steps = [
   "Repeat with the remaining ingredients to make as many burgers as you want.",
   "Enjoy your alien cheese burger! 🍔",
 ];
-export default function Steps() {
+
+export default function Steps({ isCooking }: { isCooking?: boolean }) {
   const [expand, setExpand] = useState<boolean>(false);
   return (
     <section className="flex flex-col justify-center items-start gap-3 w-full">
@@ -44,7 +47,15 @@ export default function Steps() {
       >
         {steps.map((step, index) => (
           <AccordionItem key={index} value={step}>
-            <AccordionTrigger>Step {index + 1}</AccordionTrigger>
+            <AccordionHeader className="flex justify-between items-center">
+              <div>Step {index + 1}</div>
+              {/* <AccordionTrigger>
+              </AccordionTrigger> */}
+              <div className="flex justify-center items-center gap-5">
+                {isCooking && <Checkbox />}
+                <AccordionTrigger />
+              </div>
+            </AccordionHeader>
             <AccordionContent>{step}</AccordionContent>
           </AccordionItem>
         ))}

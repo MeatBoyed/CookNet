@@ -27,6 +27,8 @@ import {
 import { Dispatch, SetStateAction, useState } from "react";
 import { TypeIngredient, IngredientSchema } from "../ui/Ingredient";
 import Ingredients from "../Recipe/Ingredients";
+import { Checkbox } from "../ui/checkbox";
+import { CheckedState } from "@radix-ui/react-checkbox";
 
 interface props {
   ingredients: TypeIngredient[];
@@ -43,7 +45,7 @@ export default function IngredientsInputDialog({
       name: "",
       quantity: 0,
       measurement: "Empty",
-      optional: false,
+      optional: "",
     },
   });
 
@@ -129,10 +131,12 @@ export default function IngredientsInputDialog({
                   render={({ field }) => (
                     <FormItem className="flex justify-center items-end gap-2">
                       <FormControl>
-                        <input
+                        <Checkbox
                           {...field}
-                          type="checkbox"
-                          className="customCheckbox peer h-4 w-4 shrink-0 rounded-sm bg-transparent border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                          value={field.value}
+                          onCheckedChange={(event: CheckedState) =>
+                            field.onChange(event ? "true" : undefined)
+                          }
                         />
                       </FormControl>
                       <FormLabel>Optional</FormLabel>
