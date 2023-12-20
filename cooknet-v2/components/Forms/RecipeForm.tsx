@@ -15,6 +15,12 @@ export default function RecipeForm() {
   const [ingredients, setIngredients] = useState<TypeIngredient[]>([]);
   const [steps, setSteps] = useState<string[]>(["input"]);
 
+  // Timer with little Afrikaans jokes
+  // Halft-way - are you winning (Kom jy reg?)
+  // 15min left - hoe far is jy?
+  // 3min lef - Maak klaar
+  // 1min left - is jy klaar
+
   return (
     <form className="flex min-h-screen flex-col items-start justify-between p-10 gap-10 lg:flex-row ">
       <ActionButtons variant="Create" />
