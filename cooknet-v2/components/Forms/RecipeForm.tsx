@@ -13,6 +13,7 @@ import StepsInput from "./StepsInput";
 
 export default function RecipeForm() {
   const [ingredients, setIngredients] = useState<TypeIngredient[]>([]);
+  const [steps, setSteps] = useState<string[]>(["input"]);
 
   return (
     <form className="flex min-h-screen flex-col items-start justify-between p-10 gap-10 lg:flex-row ">
@@ -52,7 +53,7 @@ export default function RecipeForm() {
           />
         </div>
 
-        <StepsInput />
+        <StepsInput steps={steps} setSteps={setSteps} />
       </div>
     </form>
   );

@@ -23,7 +23,7 @@ const steps = [
   "Enjoy your alien cheese burger! 🍔",
 ];
 export default function Steps() {
-  const [expand, setExapnd] = useState<boolean>(false);
+  const [expand, setExpand] = useState<boolean>(false);
   return (
     <section className="flex flex-col justify-center items-start gap-3 w-full">
       <Separator />
@@ -32,7 +32,7 @@ export default function Steps() {
         <Button
           size={"sm"}
           variant={expand ? "outline" : "default"}
-          onClick={() => setExapnd(!expand)}
+          onClick={() => setExpand(!expand)}
         >
           Expand All
         </Button>

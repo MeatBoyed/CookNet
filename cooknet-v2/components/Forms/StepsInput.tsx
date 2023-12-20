@@ -1,3 +1,5 @@
+"use client";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -5,29 +7,69 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { Separator } from "../ui/separator";
+import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
 
-export default function StepsInput() {
+interface props {
+  steps: string[];
+  setSteps: Dispatch<SetStateAction<string[]>>;
+}
+
+export default function StepsInput({ steps, setSteps }: props) {
+  const [step, setStep] = useState<string>("");
+  const [expand, setExpand] = useState<boolean>(true);
+  const [error, setError] = useState<boolean>(false);
+
   return (
     <section className="flex flex-col justify-center items-start gap-3 w-full">
       <Separator />
-      <p className="text-base font-semibold tracking-widest">Instructions</p>
+      <div className="flex justify-between items-center w-full">
+        <p className="text-base font-semibold tracking-widest">Instructions</p>
+        <Button
+          size={"sm"}
+          variant={expand ? "outline" : "default"}
+          onClick={() => setExpand(!expand)}
+        >
+          Expand All
+        </Button>
+      </div>
       <Accordion
         type="multiple"
-        defaultValue={["item-1", "item-2"]}
+        value={expand ? steps : [steps[0], steps[1]]}
         className="w-full"
       >
-        <AccordionItem value="item-1">
-          <AccordionTrigger>Step 1</AccordionTrigger>
-          <AccordionContent>
-            Cut the alien meat into thin patties and season them with salt,
-            pepper, and alien spices.
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-2">
-          <AccordionTrigger>Step 2</AccordionTrigger>
-          <AccordionContent>
-            Heat a skillet over medium-high heat and cook the meat patties for
-            about 4 minutes per side, or until well done.
+        {steps.map((step, index) => {
+          if (step !== "input") {
+            return (
+              <AccordionItem key={index} value={step}>
+                <AccordionTrigger>Step {index}</AccordionTrigger>
+                <AccordionContent>{step}</AccordionContent>
+              </AccordionItem>
+            );
+          }
+        })}
+        <AccordionItem value="input">
+          <AccordionTrigger>Step {steps.length}</AccordionTrigger>
+          <AccordionContent className="flex flex-col justify-center items-center gap-5">
+            <Textarea
+              name="step"
+              required
+              onChange={(e) => setStep(e.target.value)}
+              placeholder="Get choppin!"
+              className="h-32"
+            />
+            <p>{error && "Enter A Step"}</p>
+
+            <Button
+              className="w-full"
+              onClick={() => {
+                setError(false);
+                if (step !== "") return setSteps((prev) => [...prev, step]);
+                setError(true);
+              }}
+            >
+              Add
+            </Button>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
