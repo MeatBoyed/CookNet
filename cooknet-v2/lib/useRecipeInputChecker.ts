@@ -1,3 +1,4 @@
+import { CreateRecipePayload } from "@/app/actions/RecipesAction";
 import { IngredientOnRecipeOmit } from "@/components/IngredientsInput";
 import { Recipe } from "@prisma/client";
 import { useState } from "react";
@@ -16,7 +17,7 @@ const useRecipeValidation = () => {
   });
 
   const validateRecipe = (
-    recipe: Recipe,
+    recipe: CreateRecipePayload,
     steps: string[],
     ingredients: IngredientOnRecipeOmit[]
   ) => {

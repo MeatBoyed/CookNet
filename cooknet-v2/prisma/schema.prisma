@@ -12,7 +12,7 @@ datasource db {
 
 // Prisma schema for SQL database
 model User {
-  id           String  @id @default(cuid())
+  id           String  @id 
   username     String  @unique
   profileImage String?
   familyClan   String
@@ -29,7 +29,6 @@ model User {
 
 model Recipe {
   id          String               @id @default(cuid())
-  slug        String               @unique
   name        String
   description String
   image       String

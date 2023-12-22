@@ -9,6 +9,7 @@ export async function getIngredients() {
     data: undefined,
     error: undefined,
   };
+
   try {
     const res = await prisma.ingredient.findMany();
     console.log(res);

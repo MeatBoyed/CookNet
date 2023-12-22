@@ -9,7 +9,6 @@ import Ingredients from "../Recipe/Ingredients";
 import React, { FormEvent, useState } from "react";
 import StepsInput from "./StepsInput";
 import { IngredientOnRecipe, Recipe } from "@prisma/client";
-import { DefaultRecipe } from "@/lib/utils";
 import { object, z } from "zod";
 import { FormLabel } from "../ui/form";
 import { ToolTip } from "../ToolTip";
@@ -19,58 +18,27 @@ import { Badge } from "../ui/badge";
 import prisma from "@/lib/db";
 import CreateIngredientDialog from "./CreateIngredientDialog";
 import IngredientsInput, { IngredientOnRecipeOmit } from "../IngredientsInput";
+import { CreateRecipe, CreateRecipePayload } from "@/app/actions/RecipesAction";
 
 const formSchema = object({
   name: z.string(),
   description: z.string(),
 });
 
-// const createRecipe = async () => {
-//   const create = await prisma.recipe.create({
-//     data: {
-//       name: "",
-//       authorId: "",
-//       slug: "",
-//       description: "",
-//       duration: 0, // in minutes
-//       steps: [],
-//       ingredients: {
-//         createMany: {
-//           data: [
-//             {
-//               ingredientId: 0,
-//               measurement: "",
-//               optional: true,
-//               quantity: 0,
-//               id: "",
-//             },
-//             {
-//               ingredientId: 0,
-//               measurement: "",
-//               optional: true,
-//               quantity: 0,
-//               id: "",
-//             },
-//             {
-//               ingredientId: 0,
-//               measurement: "",
-//               optional: true,
-//               quantity: 0,
-//               id: "",
-//             },
-//           ],
-//         },
-//       },
-//     },
-//   });
-// };
-
 export default function RecipeForm() {
-  const [recipe, setRecipe] = useState<Recipe>(DefaultRecipe);
   const [ingredients, setIngredients] = useState<IngredientOnRecipeOmit[]>([]);
   const [steps, setSteps] = useState<string[]>(["input"]);
+  const [recipe, setRecipe] = useState<CreateRecipePayload>({
+    authorId: "Random User",
+    name: "",
+    description: "",
+    image: "",
+    duration: 0, // in minutes
+    steps: steps,
+  });
 
   const { inputError, validateRecipe } = useRecipeValidation();
+  const [errroMessage, setErrorMessage] = useState<string | undefined>();
 
   // Timer with little Afrikaans jokes
   // Halft-way - are you winning (Kom jy reg?)
@@ -78,7 +46,8 @@ export default function RecipeForm() {
   // 3min lef - Maak klaar
   // 1min left - is jy klaar
 
-  const createRecipe = () => {
+  const createRecipe = async () => {
+    setErrorMessage(undefined);
     // 1) Form validation
     // FormValues must be Present, At least 2 Steps added, At least 2 Ingredients
     const result = validateRecipe(recipe, steps, ingredients);
@@ -91,15 +60,21 @@ export default function RecipeForm() {
     // Further Values: slug (Generate), AuthorId (Clerk),
     setRecipe((prev) => ({
       ...prev,
-      slug: recipe.name.replace(" ", "-"),
-      authorId: "Random",
+      authorId: "RandomUser",
       image: "Image URL",
       steps: steps,
     }));
 
     // 4) Create Recipe (server action)
+    const res = await CreateRecipe(recipe, ingredients);
 
-    // setRecipe()
+    if (res.error) return setErrorMessage(res.error);
+    if (res.data) {
+      console.log("HAZZAAAA!");
+      console.log(res.data);
+
+      return;
+    }
   };
 
   return (
@@ -115,6 +90,10 @@ export default function RecipeForm() {
           className="w-full"
         />
         <Button onClick={createRecipe}>Create</Button>
+        <p className="text-destructive text-base">
+          {errroMessage && errroMessage}
+        </p>
+
         <div className="w-full flex justify-center items-start flex-col gap-10">
           <div className="w-full flex flex-col justify-center items-start gap-8">
             <div className="w-full flex justify-center items-start gap-3 flex-col">

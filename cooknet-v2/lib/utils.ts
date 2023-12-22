@@ -10,6 +10,7 @@ export function cn(...inputs: ClassValue[]) {
 // Measurments
 export const measurementSchema = z.enum([
   "Empty",
+  "Of Item",
   "Teaspoon",
   "Tablespoon",
   "Fluid Ounce",
@@ -31,6 +32,7 @@ export const measurementSchema = z.enum([
 
 export type Measurements = z.infer<typeof measurementSchema>;
 export const measurements = [
+  "Of Item",
   "Teaspoon",
   "Tablespoon",
   "Fluid Ounce",
@@ -63,21 +65,8 @@ const Conversions = {
 };
 
 export const defaultIngredient: Ingredient = {
-  id: 0,
+  id: "",
   name: "",
   description: "",
   createdBy: "",
-};
-
-export const DefaultRecipe: Recipe = {
-  id: "",
-  authorId: "",
-  slug: "",
-  name: "",
-  description: "",
-  image: "",
-  duration: 0, // in minutes
-  steps: [],
-  createdDate: new Date(),
-  updatedAt: new Date(),
 };

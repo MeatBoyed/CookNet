@@ -27,7 +27,8 @@ export default function IngredientIcon({
       className="flex justify-center items-center gap-2 p-3"
     >
       <div>
-        {props.quantity} {props.measurement} {props.name}{" "}
+        {props.quantity}{" "}
+        {props.measurement === "Of Item" ? "" : props.measurement} {props.name}{" "}
         {props.optional && "(Optional)"}
       </div>
       {isCooking && <Checkbox />}
