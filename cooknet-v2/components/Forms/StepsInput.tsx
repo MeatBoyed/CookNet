@@ -11,11 +11,12 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 
 interface props {
+  errorMessage?: string;
   steps: string[];
   setSteps: Dispatch<SetStateAction<string[]>>;
 }
 
-export default function StepsInput({ steps, setSteps }: props) {
+export default function StepsInput({ errorMessage, steps, setSteps }: props) {
   const [step, setStep] = useState<string>("");
   const [expand, setExpand] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
@@ -33,6 +34,7 @@ export default function StepsInput({ steps, setSteps }: props) {
           Expand All
         </Button>
       </div>
+      <p className="text-destructive text-sm">{errorMessage && errorMessage}</p>
       <Accordion
         type="multiple"
         value={expand ? steps : [steps[0], steps[1]]}

@@ -1,3 +1,4 @@
+import { Ingredient, Recipe } from "@prisma/client";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod";
@@ -59,4 +60,24 @@ const Conversions = {
   ounceToGram: 28.35,
   poundToOunce: 16,
   kilogramToPound: 2.20462,
+};
+
+export const defaultIngredient: Ingredient = {
+  id: 0,
+  name: "",
+  description: "",
+  createdBy: "",
+};
+
+export const DefaultRecipe: Recipe = {
+  id: "",
+  authorId: "",
+  slug: "",
+  name: "",
+  description: "",
+  image: "",
+  duration: 0, // in minutes
+  steps: [],
+  createdDate: new Date(),
+  updatedAt: new Date(),
 };

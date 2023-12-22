@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Prisma schema for SQL database
+model User {
+  id           String  @id @default(cuid())
+  username     String  @unique
+  profileImage String?
+  familyClan   String
+
+  createdAt DateTime @default(now())
+
+  // Relationships
+  likedRecipes Like[]
+  cookbook     Recipe[] // A user can have recipes in their cookbook
+
+  following Follow[] @relation(name: "UserFollowing")
+  followers Follow[] @relation(name: "UserFollowers")
+}
+
+model Recipe {
+  id          String               @id @default(cuid())
+  slug        String               @unique
+  name        String
+  description String
+  image       String
+  duration    Int
+  steps       String[]
+  ingredients IngredientOnRecipe[]
+
+  createdDate DateTime @default(now())
+  updatedAt   DateTime @updatedAt @map(name: "updated_at")
+
+  // Relationships
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+  likedBy  Like[]
+}
+
+// Define the Ingredient model
+model Ingredient {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  description String?
+  createdBy   String
+
+  recipes IngredientOnRecipe[]
+}
+
+// Joining table for Recipe
+model IngredientOnRecipe {
+  id          String  @id @default(cuid())
+  quantity    Float
+  measurement String
+  optional    Boolean
+
+  ingredientId String
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  recipeId String
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+}
+
+//
+/// Action Tables
+model Like {
+  // ... other fields ...
+  id      Int      @id @default(autoincrement())
+  likedAt DateTime @default(now())
+
+  // Reference the renamed relation name
+  recipeId String
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+  // Reference the renamed relation name
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Follow {
+  id Int @id @default(autoincrement())
+
+  followingId String
+  following   User   @relation(name: "UserFollowing", fields: [followingId], references: [id])
+
+  followerId  String
+  followersId User   @relation(name: "UserFollowers", fields: [followerId], references: [id])
+}

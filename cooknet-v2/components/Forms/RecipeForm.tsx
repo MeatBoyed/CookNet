@@ -5,15 +5,72 @@ import Image from "next/image";
 import CheeseBurger from "../../public/Alien Cheesburger.png";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import IngredientsInputDialog from "./IngredientsInputDialog";
 import Ingredients from "../Recipe/Ingredients";
-import { useState } from "react";
-import { TypeIngredient } from "../ui/Ingredient";
+import React, { FormEvent, useState } from "react";
 import StepsInput from "./StepsInput";
+import { IngredientOnRecipe, Recipe } from "@prisma/client";
+import { DefaultRecipe } from "@/lib/utils";
+import { object, z } from "zod";
+import { FormLabel } from "../ui/form";
+import { ToolTip } from "../ToolTip";
+import { Button } from "../ui/button";
+import useRecipeValidation from "@/lib/useRecipeInputChecker";
+import { Badge } from "../ui/badge";
+import prisma from "@/lib/db";
+import CreateIngredientDialog from "./CreateIngredientDialog";
+import IngredientsInput, { IngredientOnRecipeOmit } from "../IngredientsInput";
+
+const formSchema = object({
+  name: z.string(),
+  description: z.string(),
+});
+
+// const createRecipe = async () => {
+//   const create = await prisma.recipe.create({
+//     data: {
+//       name: "",
+//       authorId: "",
+//       slug: "",
+//       description: "",
+//       duration: 0, // in minutes
+//       steps: [],
+//       ingredients: {
+//         createMany: {
+//           data: [
+//             {
+//               ingredientId: 0,
+//               measurement: "",
+//               optional: true,
+//               quantity: 0,
+//               id: "",
+//             },
+//             {
+//               ingredientId: 0,
+//               measurement: "",
+//               optional: true,
+//               quantity: 0,
+//               id: "",
+//             },
+//             {
+//               ingredientId: 0,
+//               measurement: "",
+//               optional: true,
+//               quantity: 0,
+//               id: "",
+//             },
+//           ],
+//         },
+//       },
+//     },
+//   });
+// };
 
 export default function RecipeForm() {
-  const [ingredients, setIngredients] = useState<TypeIngredient[]>([]);
+  const [recipe, setRecipe] = useState<Recipe>(DefaultRecipe);
+  const [ingredients, setIngredients] = useState<IngredientOnRecipeOmit[]>([]);
   const [steps, setSteps] = useState<string[]>(["input"]);
+
+  const { inputError, validateRecipe } = useRecipeValidation();
 
   // Timer with little Afrikaans jokes
   // Halft-way - are you winning (Kom jy reg?)
@@ -21,46 +78,114 @@ export default function RecipeForm() {
   // 3min lef - Maak klaar
   // 1min left - is jy klaar
 
-  return (
-    <form className="flex min-h-screen flex-col items-start justify-between p-10 gap-10 lg:flex-row ">
-      <ActionButtons variant="Create" />
-      <Image
-        width={500}
-        height={500}
-        src={CheeseBurger}
-        alt="Thumbnail"
-        className="w-full"
-      />
-      <div className="w-full flex justify-center items-start flex-col gap-10">
-        <div className="w-full flex flex-col justify-center items-start gap-8">
-          <div className="w-full flex justify-center items-start gap-3 flex-col">
-            <Input
-              type="text"
-              id="Name"
-              name="name"
-              required
-              placeholder="Alien Cheese Burger"
-              className="text-2xl font-extrabold tracking-widest "
-            />
-            <Textarea
-              id="Description"
-              name="description"
-              placeholder="Describe your Alien Cheese Burger"
-              className="tracking-widest"
-            />
-          </div>
-        </div>
+  const createRecipe = () => {
+    // 1) Form validation
+    // FormValues must be Present, At least 2 Steps added, At least 2 Ingredients
+    const result = validateRecipe(recipe, steps, ingredients);
 
-        <div className="flex justify-center items-center flex-col gap-5">
-          <Ingredients ingredients={ingredients} />
-          <IngredientsInputDialog
-            ingredients={ingredients}
-            setIngredients={setIngredients}
+    if (!result) return;
+
+    // 2) Add Extra Values
+    // 3) Set Recipe (finish recipe state)
+    // RecipeFormValues: Name, Description, Duration, Selected Ingredients, steps, Image (TODO)
+    // Further Values: slug (Generate), AuthorId (Clerk),
+    setRecipe((prev) => ({
+      ...prev,
+      slug: recipe.name.replace(" ", "-"),
+      authorId: "Random",
+      image: "Image URL",
+      steps: steps,
+    }));
+
+    // 4) Create Recipe (server action)
+
+    // setRecipe()
+  };
+
+  return (
+    <div className="w-full flex min-h-screen flex-col items-center justify-between p-10 gap-10">
+      <ActionButtons variant="Create" />
+      <div className="w-full flex flex-col items-start justify-between gap-10 lg:flex-row">
+        {/* Upload impage comp */}
+        <Image
+          width={500}
+          height={500}
+          src={CheeseBurger}
+          alt="Thumbnail"
+          className="w-full"
+        />
+        <Button onClick={createRecipe}>Create</Button>
+        <div className="w-full flex justify-center items-start flex-col gap-10">
+          <div className="w-full flex flex-col justify-center items-start gap-8">
+            <div className="w-full flex justify-center items-start gap-3 flex-col">
+              <div className="w-full flex flex-col justify-center items-start gap-1">
+                <p className="text-sm font-semibold">Name</p>
+                <Input
+                  type="text"
+                  id="Name"
+                  name="name"
+                  required
+                  placeholder="Alien Cheese Burger"
+                  className="text-2xl font-extrabold tracking-widest "
+                  onChange={(e) =>
+                    setRecipe((prev) => ({ ...prev, name: e.target.value }))
+                  }
+                />
+                <p className="text-destructive text-sm">
+                  {inputError.name && inputError.name}
+                </p>
+              </div>
+              <div className="w-full flex flex-col justify-center items-start gap-1">
+                <p className="text-sm font-semibold">Description</p>
+                <Textarea
+                  id="Description"
+                  name="description"
+                  placeholder="Describe your Alien Cheese Burger"
+                  className="tracking-widest"
+                  onChange={(e) =>
+                    setRecipe((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+              <div className="w-full flex flex-col justify-center items-start gap-1">
+                <p className="text-sm font-semibold">Duration</p>
+                <Input
+                  type="number"
+                  id="Duration"
+                  name="duration"
+                  required
+                  placeholder="35 min"
+                  className="text-base tracking-widest "
+                  onChange={(e) =>
+                    setRecipe((prev) => ({
+                      ...prev,
+                      duration: parseFloat(e.target.value),
+                    }))
+                  }
+                />
+                <p className="text-destructive text-sm">
+                  {inputError.duration && inputError.duration}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <IngredientsInput
+            selectedIngredients={ingredients}
+            setSelectedIngredients={setIngredients}
+            errorMessage={inputError.ingredients}
+          />
+
+          <StepsInput
+            steps={steps}
+            setSteps={setSteps}
+            errorMessage={inputError.steps}
           />
         </div>
-
-        <StepsInput steps={steps} setSteps={setSteps} />
       </div>
-    </form>
+    </div>
   );
 }
