@@ -24,11 +24,12 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Dispatch, SetStateAction, useState } from "react";
-import { Ingredient, PrismaClient } from "@prisma/client";
+import { Ingredient } from "@prisma/client";
 import {
   CreateIngredient,
   CreateIngredientPayload,
 } from "@/app/actions/IngredientActions";
+import { RedirectToSignIn, useAuth } from "@clerk/nextjs";
 
 interface props {
   setIngredients: Dispatch<SetStateAction<Ingredient[]>>;
@@ -49,6 +50,7 @@ type IngredientForm = z.infer<typeof IngredientFormSchema>;
  * @returns
  */
 export default function CreateIngredientDialog({ setIngredients }: props) {
+  const { userId } = useAuth();
   const [error, setError] = useState<string | undefined>("");
   const [createdIngredient, setCreatedIngredient] = useState<
     Ingredient | undefined
@@ -61,13 +63,15 @@ export default function CreateIngredientDialog({ setIngredients }: props) {
     },
   });
 
+  if (!userId) return <RedirectToSignIn />;
+
   const onSubmit = async (input: IngredientForm) => {
     setError(undefined);
 
     const payload: CreateIngredientPayload = {
       name: input.name,
       description: input.description ? input.description : "",
-      createdBy: "Random User",
+      createdBy: userId,
     };
     const res = await CreateIngredient(payload);
 

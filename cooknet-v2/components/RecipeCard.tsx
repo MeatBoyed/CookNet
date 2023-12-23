@@ -47,11 +47,11 @@ export default function RecipeCard({
           </Link>
           <Dot />
           <p className="text-xs">{createdAt.toLocaleDateString()}</p>
-          <Dot />
+          {/* <Dot />
           <div className="flex justify-center items-center gap-1">
             <Heart size={15} className="text-red-500" />
             <p className="text-xs">{likes}</p>
-          </div>
+          </div> */}
         </div>
         <Link href={`/${username}/r/${recipeId}`}>
           <CardTitle>{name}</CardTitle>

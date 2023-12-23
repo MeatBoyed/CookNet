@@ -20,6 +20,7 @@ import { Recipe } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { EditActionButtons } from "../Recipe/ActionButtons";
 import { useRouter } from "next/navigation";
+import { RedirectToSignUp, useUser } from "@clerk/nextjs";
 
 interface props {
   iRecipe?: Recipe;
@@ -27,6 +28,10 @@ interface props {
 }
 
 export default function RecipeForm({ iRecipe, iIngredients }: props) {
+  const { user } = useUser();
+
+  if (!user) return <RedirectToSignUp />;
+
   const [ingredients, setIngredients] = useState<IngredientOnRecipeOmit[]>(
     iIngredients || []
   );
@@ -34,7 +39,7 @@ export default function RecipeForm({ iRecipe, iIngredients }: props) {
     iRecipe?.steps ? ["input", ...iRecipe.steps] : ["input"]
   );
   const [recipe, setRecipe] = useState<CreateRecipePayload>({
-    authorId: iRecipe?.authorId || "",
+    authorId: iRecipe?.authorId || user.id || "",
     name: iRecipe?.name || "",
     description: iRecipe?.description || "",
     image: iRecipe?.image || "",
@@ -66,7 +71,6 @@ export default function RecipeForm({ iRecipe, iIngredients }: props) {
     // Further Values: slug (Generate), AuthorId (Clerk),
     setRecipe((prev) => ({
       ...prev,
-      authorId: "RandomUser",
       image: "Image URL",
       steps: steps,
     }));
@@ -75,7 +79,7 @@ export default function RecipeForm({ iRecipe, iIngredients }: props) {
     const res = await CreateRecipe(recipe, ingredients);
 
     if (res.error) return setErrorMessage(res.error);
-    if (res.data) return router.push(`/${"Rando"}/r/${res.data.id}`);
+    if (res.data) return router.push(`/${user.username}/r/${res.data.id}`);
   };
 
   const updateRecipe = async () => {
@@ -99,7 +103,7 @@ export default function RecipeForm({ iRecipe, iIngredients }: props) {
     const res = await UpdateRecipe(iRecipe.id, recipe, ingredients);
 
     if (res.error) return setErrorMessage(res.error);
-    if (res.data) return router.push(`/${"Rando"}/r/${res.data.id}`);
+    if (res.data) return router.push(`/${user.username}/r/${res.data.id}`);
   };
 
   const deleteRecipe = async () => {
@@ -110,7 +114,7 @@ export default function RecipeForm({ iRecipe, iIngredients }: props) {
     const res = await DeleteRecipe(iRecipe.id);
 
     if (res.error) return setErrorMessage(res.error);
-    if (res.data) return router.push(`/${"Rando"}/r`);
+    if (res.data) return router.push(`/${user.username}/r`);
   };
 
   return (

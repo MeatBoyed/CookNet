@@ -14,6 +14,8 @@ import { measurementSchema, measurements } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { Checkbox } from "../ui/checkbox";
+import { CheckedState } from "@radix-ui/react-checkbox";
 
 const IngredientFormSchema = object({
   quantity: z.coerce
@@ -73,7 +75,7 @@ export default function SelectIngredientForm({
         onSubmit={ingredientForm.handleSubmit(onHandleSubmit)}
         className="flex justify-center items-center flex-col gap-5 w-full"
       >
-        <div className="w-full flex justify-center items-start gap-2 ">
+        <div className="w-full flex justify-center items-center gap-2 ">
           {/* Search Field */}
           <FormField
             control={ingredientForm.control}
@@ -118,21 +120,13 @@ export default function SelectIngredientForm({
             control={ingredientForm.control}
             name="optional"
             render={({ field }) => (
-              <FormItem className="flex justify-center items-center gap-2">
+              <FormItem className="flex justify-center items-end gap-2">
                 <FormControl>
-                  {/* <Checkbox
+                  <Checkbox
                     {...field}
                     value={field.value}
                     onCheckedChange={(event: CheckedState) =>
-                      field.onChange(event ? "true" : undefined)
-                    }
-                    className="w-full "
-                  /> */}
-                  <Input
-                    type="checkbox"
-                    {...field}
-                    onChange={(e) =>
-                      field.onChange(e.target.value ? "true" : undefined)
+                      field.onChange(event)
                     }
                   />
                 </FormControl>

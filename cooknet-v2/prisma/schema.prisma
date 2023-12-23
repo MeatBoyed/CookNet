@@ -12,19 +12,21 @@ datasource db {
 
 // Prisma schema for SQL database
 model User {
-  id           String  @id 
+  id           String  @id
   username     String  @unique
   profileImage String?
   familyClan   String
+  referral     String  @default("")
 
   createdAt DateTime @default(now())
 
   // Relationships
   likedRecipes Like[]
-  cookbook     Recipe[] // A user can have recipes in their cookbook
+  cookbook     String[] // A user can have recipes in their cookbook
 
   following Follow[] @relation(name: "UserFollowing")
   followers Follow[] @relation(name: "UserFollowers")
+  Recipe    Recipe[] @relation(name: "CreatedRecipes")
 }
 
 model Recipe {
@@ -41,7 +43,7 @@ model Recipe {
 
   // Relationships
   authorId String
-  author   User   @relation(fields: [authorId], references: [id])
+  author   User   @relation(name: "CreatedRecipes", fields: [authorId], references: [id])
   likedBy  Like[]
 }
 

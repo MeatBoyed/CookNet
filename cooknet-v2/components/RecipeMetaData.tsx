@@ -11,7 +11,7 @@ export default function RecipeMetaData({
 }: RecipeMetaDataProps) {
   return (
     <div className="flex justify-start items-center">
-      <Link href={`/${username}`} className="text-xs">
+      <Link href={`/${username}`} className="text-xs capitalize">
         {username}
       </Link>
       <Dot />

@@ -61,8 +61,8 @@ export function SelectIngredientIcon({
         selected && "bg-primary"
       }`}
     >
-      <p>{ingredient.name}</p>
-      <ToolTip message={`Created by: ${ingredient.createdBy}`} />
+      <p className="tracking-widest text-xs font-semibold">{ingredient.name}</p>
+      {/* <ToolTip message={`Created by: ${ingredient.createdBy}`} /> */}
     </Badge>
   );
 }

@@ -17,7 +17,6 @@ export async function CreateRecipe(
     const res = await prisma.recipe.create({
       data: {
         ...recipe,
-        authorId: "RandomUser",
         ingredients: { createMany: { data: ingredients } },
       },
     });
@@ -62,7 +61,6 @@ export async function UpdateRecipe(
       where: { id: recipeId, authorId: recipe.authorId },
       data: {
         ...recipe,
-        authorId: "RandomUser",
         ingredients: {
           upsert: ingreUpsert,
         },

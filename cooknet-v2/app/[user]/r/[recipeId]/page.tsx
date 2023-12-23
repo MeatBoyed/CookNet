@@ -8,12 +8,14 @@ import Steps from "@/components/Recipe/Steps";
 import CheeseBurger from "../../../../public/Alien Cheesburger.png";
 import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
+import { RedirectToSignIn, auth, currentUser } from "@clerk/nextjs";
 
 export default async function Recipe({
   params,
 }: {
   params: { user: string; recipeId: string };
 }) {
+  const user = await currentUser();
   const recipe = await prisma.recipe.findUnique({
     where: { id: params.recipeId, author: { username: params.user } },
     include: {
@@ -24,10 +26,15 @@ export default async function Recipe({
   });
 
   if (!recipe) return notFound();
+  if (!user) return <RedirectToSignIn />;
+
+  const userCookBook = await prisma.user.findUnique({
+    where: { id: user?.id },
+    select: { cookbook: true },
+  });
 
   return (
     <main className="flex min-h-screen flex-col items-start justify-between p-10 gap-10 lg:flex-row ">
-      {/* <Button>Hello See Me</Button> */}
       <Image
         width={320}
         height={320}
@@ -43,8 +50,11 @@ export default async function Recipe({
           createdAt={recipe.createdDate}
         />
         <RecipeActionButtons
+          userId={user?.id}
           recipeId={params.recipeId}
           username={params.user}
+          isAuthor={user?.id === recipe.authorId}
+          cookBook={userCookBook?.cookbook || []}
         />
         <Ingredients ingredients={recipe.ingredients} />
         <Steps steps={recipe.steps} />

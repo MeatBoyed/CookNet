@@ -1,13 +1,18 @@
 import RecipeCard from "@/components/RecipeCard";
 import UserHeader from "@/components/User/UserHeader";
-import UserRecipeRender from "@/components/User/UserRecipeRender";
+import { auth, currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
-export default function User() {
+export default async function User() {
+  const user = await currentUser();
+
+  if (!user) redirect("/sign-in");
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-10 gap-10">
-      <UserHeader />
+      <UserHeader user={user} />
 
-      <UserRecipeRender />
+      {/* <UserRecipeRender /> */}
       {/* <section
         id="Ingredients"
         className="flex flex-col justify-center items-start gap-3 w-full"
