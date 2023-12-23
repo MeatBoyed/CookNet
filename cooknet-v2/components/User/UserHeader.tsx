@@ -1,8 +1,13 @@
 import Image from "next/image";
 import ProfileThumbnail from "../../public/ProfileThumbnail.png";
 import { Button } from "../ui/button";
+import { User } from "@clerk/nextjs/server";
 
-export default function UserHeader() {
+interface props {
+  user: User;
+}
+
+export default function UserHeader({ user }: props) {
   return (
     <section
       id="ProfileHeader"
@@ -17,7 +22,7 @@ export default function UserHeader() {
         alt="Recipe Thumbnail"
       />
       <div className="flex flex-col justify-center items-start gap-5">
-        <p className="text-xl font-bold  ">Charles Rossouw</p>
+        <p className="text-xl font-bold capitalize">{user.username}</p>
 
         <div className="flex justify-between items-center gap-10">
           <div className="flex flex-col justify-center items-center">
