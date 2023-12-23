@@ -1,24 +1,26 @@
-import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
 import RecipeMetaData from "../RecipeMetaData";
-import { Heart } from "lucide-react";
 
-export default function RecipeHeader() {
+export default function RecipeHeader({
+  name,
+  username,
+  createdAt,
+  description,
+}: {
+  name: string;
+  description: string;
+  username: string;
+  createdAt: Date;
+}) {
   return (
     <section
       id="Header"
-      className="flex flex-col justify-center items-start gap-2"
+      className="w-full flex flex-col justify-center items-start gap-2"
     >
-      <RecipeMetaData />
-      <div className="flex flex-col justify-center items-start gap-8">
+      <RecipeMetaData username={username} createdAt={createdAt} />
+      <div className="w-full flex flex-col justify-center items-start gap-8">
         <div className="flex justify-center items-start gap-2 flex-col">
-          <h1 className="text-4xl font-extrabold tracking-widest">
-            Alien Cheese Burger
-          </h1>
-          <p className="">
-            An alien cheese burger is a delicious and exotic dish that can be
-            made with ingredients from other planets
-          </p>
+          <h1 className="text-4xl font-extrabold tracking-widest">{name}</h1>
+          {description != "" && <p className="">{description}</p>}
         </div>
       </div>
     </section>

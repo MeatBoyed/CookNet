@@ -12,38 +12,58 @@ import { Badge } from "./ui/badge";
 import Link from "next/link";
 import { Dot, Heart, HeartIcon } from "lucide-react";
 
-export default function RecipeCard() {
+interface props {
+  username: string;
+  createdAt: Date;
+  likes: number;
+  name: string;
+  description: string;
+  ingredients: string[];
+  recipeId: string;
+}
+
+export default function RecipeCard({
+  recipeId,
+  username,
+  createdAt,
+  likes,
+  name,
+  description,
+  ingredients,
+}: props) {
   return (
-    <Card>
-      <Image src={CheeseBurger} alt="Thumbnail" className="w-full" />
+    <Card className="w-80">
+      <Image
+        src={CheeseBurger}
+        width={320}
+        height={300}
+        alt="Thumbnail"
+        className=""
+      />
       <CardHeader className="p-3">
         <div className="flex justify-start items-center">
-          <Link href="/" className="text-xs">
-            Charles Rossouw
+          <Link href={`/${username}`} className="text-xs">
+            {username}
           </Link>
           <Dot />
-          <p className="text-xs">21/3/23</p>
+          <p className="text-xs">{createdAt.toLocaleDateString()}</p>
           <Dot />
           <div className="flex justify-center items-center gap-1">
             <Heart size={15} className="text-red-500" />
-            <p className="text-xs">3</p>
+            <p className="text-xs">{likes}</p>
           </div>
         </div>
-        <Link href="/charles/cheese">
-          <CardTitle>Alien Cheeseburger</CardTitle>
+        <Link href={`/${username}/r/${recipeId}`}>
+          <CardTitle>{name}</CardTitle>
         </Link>
-        <CardDescription>
-          An alien cheese burger is a delicious and exotic dish that can be made
-          with ingredients from other planets
-        </CardDescription>
+        {description != "" && <CardDescription>{description}</CardDescription>}
       </CardHeader>
       <CardContent className="flex justify-start items-start gap-2 p-3 flex-wrap">
-        <Badge variant={"secondary"}>Beef Patty</Badge>
-        <Badge variant={"secondary"}>Beef Patty</Badge>
-        <Badge variant={"secondary"}>Beef Patty</Badge>
-        <Badge variant={"secondary"}>Beef Patty</Badge>
-        <Badge variant={"secondary"}>Beef Patty</Badge>
-        <Badge variant={"secondary"}>Beef Patty</Badge>
+        {ingredients.map((ingredient, index) => (
+          <Badge key={index} variant={"secondary"}>
+            {ingredient}
+          </Badge>
+        ))}
       </CardContent>
     </Card>
   );

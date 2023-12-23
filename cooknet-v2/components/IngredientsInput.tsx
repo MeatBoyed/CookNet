@@ -1,16 +1,27 @@
 "use client";
 import { Ingredient, IngredientOnRecipe } from "@prisma/client";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import IngredientIcon, { SelectIngredientIcon } from "./ui/IngredientIcon";
+import IngredientIcon, {
+  CombinedIngredient,
+  SelectIngredientIcon,
+} from "./ui/IngredientIcon";
 import { getIngredients } from "@/app/actions/IngredientActions";
 import CreateIngredientDialog from "./Forms/CreateIngredientDialog";
 import { ToolTip } from "./ToolTip";
 import SelectIngredientForm from "./Forms/SelectIngredientForm";
 
-export type IngredientOnRecipeOmit = Omit<
-  IngredientOnRecipe,
-  "id" | "recipeId"
->;
+// export type IngredientOnRecipeOmit = Omit<
+//   IngredientOnRecipe,
+//   "id" | "recipeId"
+// >;
+
+export type IngredientOnRecipeOmit = {
+  id?: string;
+  quantity: number;
+  measurement: string;
+  optional: boolean;
+  ingredientId: string;
+};
 
 export default function IngredientsInput({
   errorMessage,
@@ -41,7 +52,6 @@ export default function IngredientsInput({
     };
 
     fetch();
-    console.log(ingredients);
   }, []);
 
   return (
@@ -123,6 +133,16 @@ export default function IngredientsInput({
               );
               if (!ingredient) return;
 
+              const Ingre: CombinedIngredient = {
+                id: "",
+                ingredient: ingredient,
+                recipeId: "",
+                ingredientId: sIngredeint.ingredientId,
+                measurement: sIngredeint.measurement,
+                optional: sIngredeint.optional,
+                quantity: sIngredeint.quantity,
+              };
+
               return (
                 <div
                   onClick={() => {
@@ -133,20 +153,7 @@ export default function IngredientsInput({
                   }}
                   className="hover:cursor-pointer hover:bg-destructive rounded-3xl"
                 >
-                  <IngredientIcon
-                    key={index}
-                    props={{
-                      id: "",
-                      recipeId: "",
-                      ingredientId: sIngredeint.ingredientId,
-                      measurement: sIngredeint.measurement,
-                      optional: sIngredeint.optional,
-                      quantity: sIngredeint.quantity,
-                      description: ingredient.description,
-                      name: ingredient.name,
-                      createdBy: ingredients[0].createdBy,
-                    }}
-                  />
+                  <IngredientIcon key={index} props={Ingre} />
                 </div>
               );
             })}

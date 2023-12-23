@@ -1,44 +1,50 @@
 "use client";
 
-import ActionButtons from "../Recipe/ActionButtons";
 import Image from "next/image";
 import CheeseBurger from "../../public/Alien Cheesburger.png";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import Ingredients from "../Recipe/Ingredients";
-import React, { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import StepsInput from "./StepsInput";
-import { IngredientOnRecipe, Recipe } from "@prisma/client";
 import { object, z } from "zod";
-import { FormLabel } from "../ui/form";
-import { ToolTip } from "../ToolTip";
 import { Button } from "../ui/button";
 import useRecipeValidation from "@/lib/useRecipeInputChecker";
-import { Badge } from "../ui/badge";
-import prisma from "@/lib/db";
-import CreateIngredientDialog from "./CreateIngredientDialog";
 import IngredientsInput, { IngredientOnRecipeOmit } from "../IngredientsInput";
-import { CreateRecipe, CreateRecipePayload } from "@/app/actions/RecipesAction";
+import {
+  CreateRecipe,
+  CreateRecipePayload,
+  DeleteRecipe,
+  UpdateRecipe,
+} from "@/app/actions/RecipesAction";
+import { Recipe } from "@prisma/client";
+import { redirect } from "next/navigation";
+import { EditActionButtons } from "../Recipe/ActionButtons";
+import { useRouter } from "next/navigation";
 
-const formSchema = object({
-  name: z.string(),
-  description: z.string(),
-});
+interface props {
+  iRecipe?: Recipe;
+  iIngredients?: IngredientOnRecipeOmit[];
+}
 
-export default function RecipeForm() {
-  const [ingredients, setIngredients] = useState<IngredientOnRecipeOmit[]>([]);
-  const [steps, setSteps] = useState<string[]>(["input"]);
+export default function RecipeForm({ iRecipe, iIngredients }: props) {
+  const [ingredients, setIngredients] = useState<IngredientOnRecipeOmit[]>(
+    iIngredients || []
+  );
+  const [steps, setSteps] = useState<string[]>(
+    iRecipe?.steps ? ["input", ...iRecipe.steps] : ["input"]
+  );
   const [recipe, setRecipe] = useState<CreateRecipePayload>({
-    authorId: "Random User",
-    name: "",
-    description: "",
-    image: "",
-    duration: 0, // in minutes
+    authorId: iRecipe?.authorId || "",
+    name: iRecipe?.name || "",
+    description: iRecipe?.description || "",
+    image: iRecipe?.image || "",
+    duration: iRecipe?.duration || 0, // in minutes
     steps: steps,
   });
 
+  const router = useRouter();
   const { inputError, validateRecipe } = useRecipeValidation();
-  const [errroMessage, setErrorMessage] = useState<string | undefined>();
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   // Timer with little Afrikaans jokes
   // Halft-way - are you winning (Kom jy reg?)
@@ -69,86 +75,126 @@ export default function RecipeForm() {
     const res = await CreateRecipe(recipe, ingredients);
 
     if (res.error) return setErrorMessage(res.error);
-    if (res.data) {
-      console.log("HAZZAAAA!");
-      console.log(res.data);
+    if (res.data) return router.push(`/${"Rando"}/r/${res.data.id}`);
+  };
 
-      return;
-    }
+  const updateRecipe = async () => {
+    setErrorMessage(undefined);
+    // 1) Form validation
+    // FormValues must be Present, At least 2 Steps added, At least 2 Ingredients
+    const result = validateRecipe(recipe, steps, ingredients);
+    if (!result) return;
+
+    // 2) Add Extra Values
+    // 3) Set Recipe (finish recipe state)
+    // RecipeFormValues: Name, Description, Duration, Selected Ingredients, steps, Image (TODO)
+    // Further Values: slug (Generate), AuthorId (Clerk),
+    setRecipe((prev) => ({
+      ...prev,
+      steps: steps,
+    }));
+
+    // 4) Create Recipe (server action)
+    if (!iRecipe) return setErrorMessage("Please create this Recipe first");
+    const res = await UpdateRecipe(iRecipe.id, recipe, ingredients);
+
+    if (res.error) return setErrorMessage(res.error);
+    if (res.data) return router.push(`/${"Rando"}/r/${res.data.id}`);
+  };
+
+  const deleteRecipe = async () => {
+    setErrorMessage(undefined);
+
+    // 4) Create Recipe (server action)
+    if (!iRecipe) return setErrorMessage("Please create this Recipe first");
+    const res = await DeleteRecipe(iRecipe.id);
+
+    if (res.error) return setErrorMessage(res.error);
+    if (res.data) return router.push(`/${"Rando"}/r`);
   };
 
   return (
     <div className="w-full flex min-h-screen flex-col items-center justify-between p-10 gap-10">
-      <ActionButtons variant="Create" />
       <div className="w-full flex flex-col items-start justify-between gap-10 lg:flex-row">
-        {/* Upload impage comp */}
+        {/* Upload image comp */}
         <Image
-          width={500}
-          height={500}
+          width={300}
+          height={300}
           src={CheeseBurger}
           alt="Thumbnail"
-          className="w-full"
+          className="self-center"
         />
-        <Button onClick={createRecipe}>Create</Button>
-        <p className="text-destructive text-base">
-          {errroMessage && errroMessage}
-        </p>
 
         <div className="w-full flex justify-center items-start flex-col gap-10">
-          <div className="w-full flex flex-col justify-center items-start gap-8">
-            <div className="w-full flex justify-center items-start gap-3 flex-col">
-              <div className="w-full flex flex-col justify-center items-start gap-1">
-                <p className="text-sm font-semibold">Name</p>
-                <Input
-                  type="text"
-                  id="Name"
-                  name="name"
-                  required
-                  placeholder="Alien Cheese Burger"
-                  className="text-2xl font-extrabold tracking-widest "
-                  onChange={(e) =>
-                    setRecipe((prev) => ({ ...prev, name: e.target.value }))
-                  }
-                />
-                <p className="text-destructive text-sm">
-                  {inputError.name && inputError.name}
-                </p>
-              </div>
-              <div className="w-full flex flex-col justify-center items-start gap-1">
-                <p className="text-sm font-semibold">Description</p>
-                <Textarea
-                  id="Description"
-                  name="description"
-                  placeholder="Describe your Alien Cheese Burger"
-                  className="tracking-widest"
-                  onChange={(e) =>
-                    setRecipe((prev) => ({
-                      ...prev,
-                      description: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-              <div className="w-full flex flex-col justify-center items-start gap-1">
-                <p className="text-sm font-semibold">Duration</p>
-                <Input
-                  type="number"
-                  id="Duration"
-                  name="duration"
-                  required
-                  placeholder="35 min"
-                  className="text-base tracking-widest "
-                  onChange={(e) =>
-                    setRecipe((prev) => ({
-                      ...prev,
-                      duration: parseFloat(e.target.value),
-                    }))
-                  }
-                />
-                <p className="text-destructive text-sm">
-                  {inputError.duration && inputError.duration}
-                </p>
-              </div>
+          <div className="w-full flex justify-center items-start gap-3 flex-col">
+            <p className="text-destructive text-base">
+              {errorMessage && errorMessage}
+            </p>
+            {iRecipe ? (
+              <EditActionButtons
+                username={"Rando"}
+                handleUpdate={updateRecipe}
+                handleDelete={deleteRecipe}
+              />
+            ) : (
+              <Button onClick={createRecipe} className="w-full">
+                Create
+              </Button>
+            )}
+            <div className="w-full flex flex-col justify-center items-start gap-1">
+              <p className="text-sm font-semibold">Name</p>
+              <Input
+                type="text"
+                id="Name"
+                name="name"
+                required
+                placeholder="Alien Cheese Burger"
+                className="text-2xl font-extrabold tracking-widest "
+                value={recipe.name}
+                onChange={(e) =>
+                  setRecipe((prev) => ({ ...prev, name: e.target.value }))
+                }
+              />
+              <p className="text-destructive text-sm">
+                {inputError.name && inputError.name}
+              </p>
+            </div>
+            <div className="w-full flex flex-col justify-center items-start gap-1">
+              <p className="text-sm font-semibold">Description</p>
+              <Textarea
+                id="Description"
+                name="description"
+                placeholder="Describe your Alien Cheese Burger"
+                className="tracking-widest"
+                value={recipe.description}
+                onChange={(e) =>
+                  setRecipe((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+              />
+            </div>
+            <div className="w-full flex flex-col justify-center items-start gap-1">
+              <p className="text-sm font-semibold">Duration</p>
+              <Input
+                type="number"
+                id="Duration"
+                name="duration"
+                required
+                placeholder="35 min"
+                className="text-base tracking-widest "
+                value={recipe.duration}
+                onChange={(e) =>
+                  setRecipe((prev) => ({
+                    ...prev,
+                    duration: parseFloat(e.target.value),
+                  }))
+                }
+              />
+              <p className="text-destructive text-sm">
+                {inputError.duration && inputError.duration}
+              </p>
             </div>
           </div>
 

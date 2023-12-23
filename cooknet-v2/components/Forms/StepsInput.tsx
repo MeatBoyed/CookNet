@@ -44,14 +44,14 @@ export default function StepsInput({ errorMessage, steps, setSteps }: props) {
           if (step !== "input") {
             return (
               <AccordionItem key={index} value={step}>
-                <AccordionTrigger>Step {index}</AccordionTrigger>
+                <AccordionTrigger>Step {index - 1}</AccordionTrigger>
                 <AccordionContent>{step}</AccordionContent>
               </AccordionItem>
             );
           }
         })}
         <AccordionItem value="input">
-          <AccordionTrigger>Step {steps.length}</AccordionTrigger>
+          <AccordionTrigger>Step {steps.length - 1}</AccordionTrigger>
           <AccordionContent className="flex flex-col justify-center items-center gap-5">
             <Textarea
               name="step"

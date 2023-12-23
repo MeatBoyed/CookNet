@@ -80,8 +80,8 @@ export default function CreateIngredientDialog({ setIngredients }: props) {
 
   return (
     <Sheet>
-      <SheetTrigger>
-        <Button size={"sm"}>Create an Ingredients</Button>
+      <SheetTrigger className="bg-primary text-primary-foreground hover:bg-primary/90 h-9 rounded-md px-3">
+        Create an Ingredient
       </SheetTrigger>
       <SheetContent>
         <Form {...ingredientForm}>

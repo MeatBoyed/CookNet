@@ -5,7 +5,21 @@ import { Checkbox } from "./checkbox";
 import { Ingredient, IngredientOnRecipe } from "@prisma/client";
 import { ToolTip } from "../ToolTip";
 
-export type CombinedIngredient = IngredientOnRecipe & Ingredient;
+export type CombinedIngredient = {
+  ingredient: {
+    id: string;
+    name: string;
+    description: string | null;
+    createdBy: string;
+  };
+} & {
+  id: string;
+  quantity: number;
+  measurement: string;
+  optional: boolean;
+  ingredientId: string;
+  recipeId: string;
+};
 
 interface IngredientIconProps {
   props: CombinedIngredient;
@@ -28,8 +42,8 @@ export default function IngredientIcon({
     >
       <div>
         {props.quantity}{" "}
-        {props.measurement === "Of Item" ? "" : props.measurement} {props.name}{" "}
-        {props.optional && "(Optional)"}
+        {props.measurement === "Of Item" ? "" : props.measurement}{" "}
+        {props.ingredient.name} {props.optional && "(Optional)"}
       </div>
       {isCooking && <Checkbox />}
     </Badge>

@@ -14,9 +14,9 @@ export default async function CreatePage() {
 
   const session = await getServerSession(authOptions);
 
-  if (!session || !session.user) {
-    redirect("/api/auth/signin");
-  }
+  // if (!session || !session.user) {
+  //   redirect("/api/auth/signin");
+  // }
 
   return (
     <div className="container flex flex-col items-center justify-center gap-12 px-4 py-10 ">

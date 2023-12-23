@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-const measurementsCat = ["Volume", "Weight", "Dry", "Conversions"];
+const measurementsCat = ["Volume", "Weight", "Dry"];
 const measurements = {
   volume: [
     "Teaspoon",
@@ -27,6 +27,7 @@ const measurements = {
     kilogramToPound: 2.20462,
   },
 };
+
 export default function MeasurmentSelectors({
   measurement,
   setSelectedIngredient,
