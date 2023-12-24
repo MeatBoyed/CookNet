@@ -135,13 +135,13 @@ export default function RecipeForm({
     <div className="w-full flex min-h-screen flex-col items-center justify-between p-10 gap-10">
       <div className="w-full flex flex-col items-start justify-between gap-10 lg:flex-row">
         {/* Upload image comp */}
-        <Image
+        {/* <Image
           width={300}
           height={300}
           src={CheeseBurger}
           alt="Thumbnail"
           className="self-center"
-        />
+        /> */}
 
         <div className="w-full flex justify-center items-start flex-col gap-10">
           <div className="w-full flex justify-center items-start gap-3 flex-col">

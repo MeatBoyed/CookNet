@@ -36,13 +36,13 @@ export default function RecipeCard({
 }: props) {
   return (
     <Card className="w-80">
-      <Image
+      {/* <Image
         src={CheeseBurger}
         width={320}
         height={300}
         alt="Thumbnail"
         className=""
-      />
+      /> */}
       <CardHeader className="p-3">
         <div className="flex justify-start items-center">
           <Link href={`/${username}`} className="text-xs capitalize">

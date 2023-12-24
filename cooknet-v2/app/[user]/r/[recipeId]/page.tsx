@@ -33,13 +33,13 @@ export default async function Recipe({
 
   return (
     <main className="flex min-h-screen flex-col items-start justify-between p-10 gap-10 lg:flex-row ">
-      <Image
+      {/* <Image
         width={320}
         height={320}
         src={CheeseBurger}
         alt="Thumbnail"
         className="w-80 self-center md:self-start"
-      />
+      /> */}
       <div className="w-full flex justify-center items-start flex-col gap-10">
         <RecipeHeader
           name={recipe.name}
