@@ -30,7 +30,8 @@ export default async function EditRecipePage({
 
   return (
     <RecipeForm
-      user={user}
+      userId={user.id}
+      username={user.username || ""}
       iRecipe={recipe}
       iIngredients={recipe.ingredients}
     />

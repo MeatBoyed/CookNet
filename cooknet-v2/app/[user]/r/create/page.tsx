@@ -6,5 +6,5 @@ export default async function CreateRecipePage() {
 
   if (!user) return <RedirectToSignUp />;
 
-  return <RecipeForm user={user} />;
+  return <RecipeForm userId={user.id} username={user.username} />;
 }

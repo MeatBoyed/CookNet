@@ -70,25 +70,17 @@ export async function GetRecipeCookBook(userId: string) {
 export const getFavoritesCount = async (userId: string) => {
   return (
     (
-      await prisma.user.findMany({
+      await prisma.user.findUnique({
         where: { id: userId },
         select: {
           cookbook: true,
         },
       })
-    ).length || 0
+    )?.cookbook.length || 0
   );
 };
 
 export const getRecipesCount = async (userId: string) => {
-  //   return (
-  //     await prisma.user.findMany({
-  //       where: { id: userId },
-  //       select: {
-  //         Recipe: true,
-  //       },
-  //     })
-  //   ).length;
   return (
     (
       await prisma.user.findUnique({

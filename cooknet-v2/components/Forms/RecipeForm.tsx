@@ -6,7 +6,6 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import React, { useState } from "react";
 import StepsInput from "./StepsInput";
-import { object, z } from "zod";
 import { Button } from "../ui/button";
 import useRecipeValidation from "@/lib/useRecipeInputChecker";
 import IngredientsInput, { IngredientOnRecipeOmit } from "../IngredientsInput";
@@ -17,19 +16,22 @@ import {
   UpdateRecipe,
 } from "@/app/actions/RecipesAction";
 import { Recipe } from "@prisma/client";
-import { redirect } from "next/navigation";
 import { EditActionButtons } from "../Recipe/ActionButtons";
 import { useRouter } from "next/navigation";
-import { RedirectToSignUp, useUser } from "@clerk/nextjs";
-import { User } from "@clerk/nextjs/server";
 
 interface props {
-  user: User;
+  userId: string;
+  username: string;
   iRecipe?: Recipe;
   iIngredients?: IngredientOnRecipeOmit[];
 }
 
-export default function RecipeForm({ user, iRecipe, iIngredients }: props) {
+export default function RecipeForm({
+  userId,
+  username,
+  iRecipe,
+  iIngredients,
+}: props) {
   const [ingredients, setIngredients] = useState<IngredientOnRecipeOmit[]>(
     iIngredients || []
   );
@@ -37,7 +39,7 @@ export default function RecipeForm({ user, iRecipe, iIngredients }: props) {
     iRecipe?.steps ? ["input", ...iRecipe.steps] : ["input"]
   );
   const [recipe, setRecipe] = useState<CreateRecipePayload>({
-    authorId: iRecipe?.authorId || user.id || "",
+    authorId: iRecipe?.authorId || userId || "",
     name: iRecipe?.name || "",
     description: iRecipe?.description || "",
     image: iRecipe?.image || "",
@@ -77,7 +79,7 @@ export default function RecipeForm({ user, iRecipe, iIngredients }: props) {
     const res = await CreateRecipe(recipe, ingredients);
 
     if (res.error) return setErrorMessage(res.error);
-    if (res.data) return router.push(`/${user.username}/r/${res.data.id}`);
+    if (res.data) return router.push(`/${username}/r/${res.data.id}`);
   };
 
   const updateRecipe = async () => {
@@ -101,7 +103,7 @@ export default function RecipeForm({ user, iRecipe, iIngredients }: props) {
     const res = await UpdateRecipe(iRecipe.id, recipe, ingredients);
 
     if (res.error) return setErrorMessage(res.error);
-    if (res.data) return router.push(`/${user.username}/r/${res.data.id}`);
+    if (res.data) return router.push(`/${username}/r/${res.data.id}`);
   };
 
   const deleteRecipe = async () => {
@@ -112,7 +114,7 @@ export default function RecipeForm({ user, iRecipe, iIngredients }: props) {
     const res = await DeleteRecipe(iRecipe.id);
 
     if (res.error) return setErrorMessage(res.error);
-    if (res.data) return router.push(`/${user.username}/r`);
+    if (res.data) return router.push(`/${username}/r`);
   };
 
   return (

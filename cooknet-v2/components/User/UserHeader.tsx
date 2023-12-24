@@ -1,8 +1,4 @@
 import Image from "next/image";
-import ProfileThumbnail from "../../public/ProfileThumbnail.png";
-import { Button } from "../ui/button";
-import { User } from "@clerk/nextjs/server";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 interface props {
   username: string | null;

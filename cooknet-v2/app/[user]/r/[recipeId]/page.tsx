@@ -1,8 +1,6 @@
 import Image from "next/image";
 import RecipeHeader from "@/components/Recipe/RecipeHeader";
-import ActionButtons, {
-  RecipeActionButtons,
-} from "@/components/Recipe/ActionButtons";
+import { RecipeActionButtons } from "@/components/Recipe/ActionButtons";
 import Ingredients from "@/components/Recipe/Ingredients";
 import Steps from "@/components/Recipe/Steps";
 import CheeseBurger from "../../../../public/Alien Cheesburger.png";
