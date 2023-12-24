@@ -3,8 +3,10 @@
 import prisma from "@/lib/db";
 import { Prisma, User } from "@prisma/client";
 import { error } from "console";
+import { tree } from "next/dist/build/templates/app-page";
+import { GetUsersRecipes } from "./lib/UserHandles";
 
-export type CreateUserPayload = Omit<User, "createdAt" | "profileImage">;
+export type CreateUserPayload = Omit<User, "createdAt" | "cookbook">;
 
 export async function CreateUser(user: CreateUserPayload) {
   try {

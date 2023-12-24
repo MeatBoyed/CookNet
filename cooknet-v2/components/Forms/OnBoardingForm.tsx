@@ -50,9 +50,11 @@ const referralOptions = [
 export default function OnBoardingForm({
   id,
   username,
+  profileImage,
 }: {
   id: string;
   username: string;
+  profileImage: string;
 }) {
   const router = useRouter();
   const [error, setError] = useState<string | undefined>();
@@ -71,6 +73,7 @@ export default function OnBoardingForm({
       familyClan: input.clan,
       referral: input.referral,
       username: username || "No Username",
+      profileImage: profileImage,
     };
 
     const res = await CreateUser(userPayload);

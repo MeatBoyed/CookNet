@@ -10,7 +10,11 @@ export default async function OnBoardingPage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-10 gap-10">
-      <OnBoardingForm id={user.id} username={user.username || ""} />
+      <OnBoardingForm
+        id={user.id}
+        username={user.username || ""}
+        profileImage={user.imageUrl}
+      />
     </main>
   );
 }

@@ -18,7 +18,9 @@ interface props {
   likes: number;
   name: string;
   description: string;
-  ingredients: string[];
+  ingredients?: string[];
+  ingredientsObj?: { ingredient: { name: string } }[];
+
   recipeId: string;
 }
 
@@ -30,6 +32,7 @@ export default function RecipeCard({
   name,
   description,
   ingredients,
+  ingredientsObj,
 }: props) {
   return (
     <Card className="w-80">
@@ -42,13 +45,13 @@ export default function RecipeCard({
       />
       <CardHeader className="p-3">
         <div className="flex justify-start items-center">
-          <Link href={`/${username}`} className="text-xs">
+          <Link href={`/${username}`} className="text-xs capitalize">
             {username}
           </Link>
           <Dot />
           <p className="text-xs">{createdAt.toLocaleDateString()}</p>
-          {/* <Dot />
-          <div className="flex justify-center items-center gap-1">
+          {/* <Dot /> */}
+          {/* <div className="flex justify-center items-center gap-1">
             <Heart size={15} className="text-red-500" />
             <p className="text-xs">{likes}</p>
           </div> */}
@@ -59,11 +62,18 @@ export default function RecipeCard({
         {description != "" && <CardDescription>{description}</CardDescription>}
       </CardHeader>
       <CardContent className="flex justify-start items-start gap-2 p-3 flex-wrap">
-        {ingredients.map((ingredient, index) => (
-          <Badge key={index} variant={"secondary"}>
-            {ingredient}
-          </Badge>
-        ))}
+        {ingredientsObj &&
+          ingredientsObj.map((ingredient, index) => (
+            <Badge key={index} variant={"secondary"}>
+              {ingredient.ingredient.name}
+            </Badge>
+          ))}
+        {ingredients &&
+          ingredients.map((ingredient, index) => (
+            <Badge key={index} variant={"secondary"}>
+              {ingredient}
+            </Badge>
+          ))}
       </CardContent>
     </Card>
   );

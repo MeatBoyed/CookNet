@@ -7,12 +7,13 @@ import {
   SignedOut,
   UserButton,
   auth,
+  currentUser,
 } from "@clerk/nextjs";
 
-export default function Navbar() {
-  const { user } = auth();
+export default async function Navbar() {
+  const user = await currentUser();
   return (
-    <nav className="flex w-full items-center justify-between border shadow-inner px-10 py-2">
+    <nav className="flex w-full itrgb(239 68 68 / var(--tw-text-opacity)rgb(239 68 68 / var(--tw-text-opacity)ems-center justify-between border shadow-inner px-10 py-2">
       <Link href="/" className="text-2xl font-bold leading-normal">
         CookNet
       </Link>

@@ -14,7 +14,7 @@ datasource db {
 model User {
   id           String  @id
   username     String  @unique
-  profileImage String?
+  profileImage String 
   familyClan   String
   referral     String  @default("")
 
