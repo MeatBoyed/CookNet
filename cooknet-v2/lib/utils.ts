@@ -70,3 +70,16 @@ export const defaultIngredient: Ingredient = {
   description: "",
   createdBy: "",
 };
+
+export const CreateRecipeLoadingText = [
+  "Your recipe is simmering in our culinary database.",
+  "Whipping up your recipe behind the scenes!",
+  "Stirring the magic for your delicious recipe.",
+  "Cooking up your creation in our recipe cauldron.",
+  "Your recipe is marinating in our digital kitchen.",
+  "Simmering the flavors of your recipe in our system.",
+  "Baking your recipe to perfection in our data oven.",
+  "Seasoning your recipe with care in our database pot.",
+  "Letting your recipe simmer and stew in our backend.",
+  "Slow-cooking your masterpiece in our digital kitchen.",
+];

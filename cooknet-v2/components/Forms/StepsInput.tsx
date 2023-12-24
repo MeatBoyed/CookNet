@@ -9,6 +9,8 @@ import {
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
+import { X } from "lucide-react";
+import { AccordionHeader } from "@radix-ui/react-accordion";
 
 interface props {
   errorMessage?: string;
@@ -40,18 +42,35 @@ export default function StepsInput({ errorMessage, steps, setSteps }: props) {
         value={expand ? steps : [steps[0], steps[1]]}
         className="w-full"
       >
-        {steps.map((step, index) => {
-          if (step !== "input") {
+        {steps.map((iStep, index) => {
+          if (iStep !== "input") {
             return (
-              <AccordionItem key={index} value={step}>
-                <AccordionTrigger>Step {index - 1}</AccordionTrigger>
-                <AccordionContent>{step}</AccordionContent>
+              <AccordionItem key={index} value={iStep}>
+                <AccordionHeader className="flex justify-between items-center">
+                  <div>Step {index}</div>
+                  <div className="flex justify-center items-center gap-5">
+                    <X
+                      onClick={() => {
+                        const updatedSteps = steps.filter(
+                          (step, i) => i != index
+                        );
+                        setSteps(updatedSteps);
+                      }}
+                      className="hover:cursor-pointer"
+                      size={20}
+                    />
+                    <AccordionTrigger />
+                  </div>
+                </AccordionHeader>
+                <AccordionContent>{iStep}</AccordionContent>
               </AccordionItem>
             );
           }
         })}
         <AccordionItem value="input">
-          <AccordionTrigger>Step {steps.length - 1}</AccordionTrigger>
+          <AccordionTrigger>
+            Step {steps.length == 1 ? 1 : steps.length}
+          </AccordionTrigger>
           <AccordionContent className="flex flex-col justify-center items-center gap-5">
             <Textarea
               name="step"

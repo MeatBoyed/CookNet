@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/db";
 import { Recipe } from "@prisma/client";
-import { getRecipes } from "./RecipeHandles";
+import { getRecipe } from "./RecipeHandles";
 
 export type RecipeRender = {
   ingredients: {
@@ -57,7 +57,7 @@ export async function GetRecipeCookBook(userId: string) {
   if (!cookbook) return [];
   const recipes: RecipeRender[] = [];
   cookbook.cookbook.forEach(async (recipeId) => {
-    return await getRecipes(recipeId);
+    return await getRecipe(recipeId);
   });
   return recipes || [];
 }

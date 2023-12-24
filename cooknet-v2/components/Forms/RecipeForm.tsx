@@ -18,6 +18,8 @@ import {
 import { Recipe } from "@prisma/client";
 import { EditActionButtons } from "../Recipe/ActionButtons";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { CreateRecipeLoadingText } from "@/lib/utils";
 
 interface props {
   userId: string;
@@ -50,6 +52,7 @@ export default function RecipeForm({
   const router = useRouter();
   const { inputError, validateRecipe } = useRecipeValidation();
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Timer with little Afrikaans jokes
   // Halft-way - are you winning (Kom jy reg?)
@@ -59,63 +62,74 @@ export default function RecipeForm({
 
   const createRecipe = async () => {
     setErrorMessage(undefined);
-    // 1) Form validation
-    // FormValues must be Present, At least 2 Steps added, At least 2 Ingredients
+    setLoading(true);
     const result = validateRecipe(recipe, steps, ingredients);
 
-    if (!result) return;
+    if (!result) return setLoading(false);
 
-    // 2) Add Extra Values
-    // 3) Set Recipe (finish recipe state)
-    // RecipeFormValues: Name, Description, Duration, Selected Ingredients, steps, Image (TODO)
-    // Further Values: slug (Generate), AuthorId (Clerk),
     setRecipe((prev) => ({
       ...prev,
       image: "Image URL",
       steps: steps,
     }));
 
-    // 4) Create Recipe (server action)
     const res = await CreateRecipe(recipe, ingredients);
 
-    if (res.error) return setErrorMessage(res.error);
-    if (res.data) return router.push(`/${username}/r/${res.data.id}`);
+    if (res.error) setErrorMessage(res.error);
+    if (res.data) router.push(`/${username}/r/${res.data.id}`);
+    setLoading(true);
   };
 
   const updateRecipe = async () => {
     setErrorMessage(undefined);
-    // 1) Form validation
-    // FormValues must be Present, At least 2 Steps added, At least 2 Ingredients
+    setLoading(true);
     const result = validateRecipe(recipe, steps, ingredients);
-    if (!result) return;
+    if (!result) return setLoading(false);
 
-    // 2) Add Extra Values
-    // 3) Set Recipe (finish recipe state)
-    // RecipeFormValues: Name, Description, Duration, Selected Ingredients, steps, Image (TODO)
-    // Further Values: slug (Generate), AuthorId (Clerk),
     setRecipe((prev) => ({
       ...prev,
       steps: steps,
     }));
 
-    // 4) Create Recipe (server action)
-    if (!iRecipe) return setErrorMessage("Please create this Recipe first");
+    if (!iRecipe) {
+      setErrorMessage("Please create this Recipe first");
+      return setLoading(false);
+    }
     const res = await UpdateRecipe(iRecipe.id, recipe, ingredients);
 
-    if (res.error) return setErrorMessage(res.error);
-    if (res.data) return router.push(`/${username}/r/${res.data.id}`);
+    if (res.error) setErrorMessage(res.error);
+    if (res.data) router.push(`/${username}/r/${res.data.id}`);
+    setLoading(false);
   };
 
   const deleteRecipe = async () => {
     setErrorMessage(undefined);
+    setLoading(true);
 
-    // 4) Create Recipe (server action)
-    if (!iRecipe) return setErrorMessage("Please create this Recipe first");
+    if (!iRecipe) {
+      setLoading(false);
+      return setErrorMessage("Please create this Recipe first");
+    }
     const res = await DeleteRecipe(iRecipe.id);
 
-    if (res.error) return setErrorMessage(res.error);
-    if (res.data) return router.push(`/${username}/r`);
+    if (res.error) setErrorMessage(res.error);
+    if (res.data) router.push(`/${username}/r`);
+    setLoading(false);
   };
+
+  if (loading)
+    return (
+      <div className="min-h-screen flex-col flex justify-center items-center gap-3">
+        <Loader2 className="mr-2 h-10 w-10 animate-spin" />
+        <p className="text-md">
+          {
+            CreateRecipeLoadingText[
+              Math.floor(Math.random() * CreateRecipeLoadingText.length)
+            ]
+          }
+        </p>
+      </div>
+    );
 
   return (
     <div className="w-full flex min-h-screen flex-col items-center justify-between p-10 gap-10">

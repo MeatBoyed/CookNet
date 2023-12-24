@@ -12,7 +12,6 @@ export async function getIngredients() {
 
   try {
     const res = await prisma.ingredient.findMany();
-    console.log(res);
     return { data: res };
   } catch (error) {
     console.log(error);

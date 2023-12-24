@@ -82,12 +82,12 @@ export default function CreateIngredientDialog({ setIngredients }: props) {
     };
     const res = await CreateIngredient(payload);
 
-    if (res?.error) return setError(res.error);
+    if (res?.error) setError(res.error);
     if (res?.data) {
       setCreatedIngredient(res.data);
       setIngredients((prev) => [...prev, res?.data]);
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   return (

@@ -4,6 +4,7 @@ import { measurementSchema } from "@/lib/utils";
 import { Checkbox } from "./checkbox";
 import { Ingredient, IngredientOnRecipe } from "@prisma/client";
 import { ToolTip } from "../ToolTip";
+import { Skeleton } from "./skeleton";
 
 export type CombinedIngredient = {
   ingredient: {

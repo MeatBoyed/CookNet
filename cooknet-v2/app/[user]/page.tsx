@@ -23,7 +23,6 @@ export default async function User({ params }: { params: { user: string } }) {
   if (!pageUser) return notFound();
 
   const favoritesCount = await getFavoritesCount(pageUser.id);
-  console.log(favoritesCount);
   const recipesCount = await getRecipesCount(pageUser.id);
 
   const recipes = await GetUsersRecipes(pageUser.id);

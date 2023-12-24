@@ -9,11 +9,7 @@ import { getIngredients } from "@/app/actions/IngredientActions";
 import CreateIngredientDialog from "./Forms/CreateIngredientDialog";
 import { ToolTip } from "./ToolTip";
 import SelectIngredientForm from "./Forms/SelectIngredientForm";
-
-// export type IngredientOnRecipeOmit = Omit<
-//   IngredientOnRecipe,
-//   "id" | "recipeId"
-// >;
+import { Skeleton } from "./ui/skeleton";
 
 export type IngredientOnRecipeOmit = {
   id?: string;
@@ -32,6 +28,9 @@ export default function IngredientsInput({
   selectedIngredients: IngredientOnRecipeOmit[];
   setSelectedIngredients: Dispatch<SetStateAction<IngredientOnRecipeOmit[]>>;
 }) {
+  const [error, setError] = useState<string | undefined>("");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [selectedIngredient, setSelectedIngredient] =
     useState<IngredientOnRecipeOmit>({
       ingredientId: "",
@@ -39,11 +38,11 @@ export default function IngredientsInput({
       optional: false,
       quantity: 0,
     });
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const [error, setError] = useState<string | undefined>("");
 
   useEffect(() => {
     setError(undefined);
+    setLoading(true);
+
     const fetch = async () => {
       const res = await getIngredients();
 
@@ -52,6 +51,7 @@ export default function IngredientsInput({
     };
 
     fetch();
+    setLoading(false);
   }, []);
 
   return (
@@ -74,6 +74,13 @@ export default function IngredientsInput({
         </div>
         {/* Add border for Heirachy of ingredients */}
         <div className="flex justify-start items-start gap-2 flex-wrap w-full border p-3">
+          {loading && (
+            <>
+              <Skeleton className="w-16 h-[43px]" />
+              <Skeleton className="w-16 h-[43px]" />
+              <Skeleton className="w-16 h-[43px]" />
+            </>
+          )}
           {ingredients.map((ingredient, index) => (
             <div
               key={index}
@@ -124,7 +131,7 @@ export default function IngredientsInput({
             <p className="text-sm font-semibold tracking-widest">
               Your Selected Ingredients
             </p>
-            <ToolTip message="Click on Selected Recipes to Remove them" />
+            <ToolTip message="Click on Selected Ingredients to Remove them" />
           </div>
 
           <div className="flex justify-start items-start gap-2 flex-wrap w-full">
