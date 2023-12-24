@@ -25,7 +25,7 @@ export default async function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-10 gap-10">
       {/* <Button>Hello See Me</Button> */}
       <h1 className="text-4xl font-extrabold tracking-widest text-center">
-        Today's Top Picks
+        Today&#39;s Top Picks
       </h1>
 
       <section

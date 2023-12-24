@@ -1,5 +1,6 @@
 import RecipeForm from "@/components/Forms/RecipeForm";
 import prisma from "@/lib/db";
+import { RedirectToSignUp, currentUser } from "@clerk/nextjs";
 import { notFound } from "next/navigation";
 
 export default async function EditRecipePage({
@@ -7,6 +8,7 @@ export default async function EditRecipePage({
 }: {
   params: { user: string; recipeId: string };
 }) {
+  const user = await currentUser();
   const recipe = await prisma.recipe.findUnique({
     where: { id: params.recipeId, author: { username: params.user } },
     include: {
@@ -24,6 +26,13 @@ export default async function EditRecipePage({
   });
 
   if (!recipe) return notFound();
+  if (!user) return <RedirectToSignUp />;
 
-  return <RecipeForm iRecipe={recipe} iIngredients={recipe.ingredients} />;
+  return (
+    <RecipeForm
+      user={user}
+      iRecipe={recipe}
+      iIngredients={recipe.ingredients}
+    />
+  );
 }

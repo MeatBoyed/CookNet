@@ -21,17 +21,15 @@ import { redirect } from "next/navigation";
 import { EditActionButtons } from "../Recipe/ActionButtons";
 import { useRouter } from "next/navigation";
 import { RedirectToSignUp, useUser } from "@clerk/nextjs";
+import { User } from "@clerk/nextjs/server";
 
 interface props {
+  user: User;
   iRecipe?: Recipe;
   iIngredients?: IngredientOnRecipeOmit[];
 }
 
-export default function RecipeForm({ iRecipe, iIngredients }: props) {
-  const { user } = useUser();
-
-  if (!user) return <RedirectToSignUp />;
-
+export default function RecipeForm({ user, iRecipe, iIngredients }: props) {
   const [ingredients, setIngredients] = useState<IngredientOnRecipeOmit[]>(
     iIngredients || []
   );

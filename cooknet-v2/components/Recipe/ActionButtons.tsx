@@ -51,9 +51,12 @@ export function RecipeActionButtons({
   const [inCookBook, setInCookBook] = useState<boolean>(false);
 
   useEffect(() => {
-    const res = cookBook?.find((recId) => recId === recipeId);
-    if (res) return setInCookBook(true);
-  }, []);
+    const check = () => {
+      const res = cookBook?.find((recId) => recId === recipeId);
+      if (res) return setInCookBook(true);
+    };
+    check();
+  });
 
   const handleAdd = async () => {
     setError(undefined);

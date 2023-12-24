@@ -8,7 +8,7 @@ import { dark } from "@clerk/themes";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/Footer";
 
-export const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata = {
   title: "CookNet",

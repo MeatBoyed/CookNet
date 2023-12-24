@@ -76,6 +76,7 @@ export default function IngredientsInput({
         <div className="flex justify-start items-start gap-2 flex-wrap w-full border p-3">
           {ingredients.map((ingredient, index) => (
             <div
+              key={index}
               onClick={() => {
                 if (selectedIngredient.ingredientId === ingredient.id) {
                   return setSelectedIngredient((prev) => ({
@@ -145,6 +146,7 @@ export default function IngredientsInput({
 
               return (
                 <div
+                  key={index}
                   onClick={() => {
                     const newList = selectedIngredients.filter(
                       (ingre) => ingre != sIngredeint

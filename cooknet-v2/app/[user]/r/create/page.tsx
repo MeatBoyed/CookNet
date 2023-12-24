@@ -1,6 +1,10 @@
 import RecipeForm from "@/components/Forms/RecipeForm";
-import { auth } from "@clerk/nextjs";
+import { RedirectToSignUp, auth, currentUser } from "@clerk/nextjs";
 
-export default function CreateRecipePage() {
-  return <RecipeForm />;
+export default async function CreateRecipePage() {
+  const user = await currentUser();
+
+  if (!user) return <RedirectToSignUp />;
+
+  return <RecipeForm user={user} />;
 }

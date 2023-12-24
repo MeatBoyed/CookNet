@@ -89,7 +89,7 @@ export default function OnBoardingForm({
           <CardHeader className="text-center">
             <CardTitle>Welcome to CookNet!</CardTitle>
             <CardDescription>
-              We just need a few more details and you're ready to go!
+              We just need a few more details and you&#39;re ready to go!
             </CardDescription>
           </CardHeader>
 
