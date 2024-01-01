@@ -45,10 +45,10 @@ const handler = createEdgeStoreNextHandler({
 
 export { handler as GET, handler as POST };
 
-export const edgeStoreClient = initEdgeStoreClient({
-  router: edgeStoreRouter,
-  baseUrl: "http://localhost:3000/api/edgestore",
-});
+// export const edgeStoreClient = initEdgeStoreClient({
+//   router: edgeStoreRouter,
+//   baseUrl: "http://localhost:3000/api/edgestore",
+// });
 
 /**
  * This type is used to create the type-safe client for the frontend.

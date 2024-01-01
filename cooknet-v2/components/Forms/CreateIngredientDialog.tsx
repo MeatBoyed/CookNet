@@ -12,7 +12,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { object, z } from "zod";
+import { any, object, z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -25,10 +25,10 @@ import {
 } from "../ui/form";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Ingredient } from "@prisma/client";
-import {
-  CreateIngredient,
-  CreateIngredientPayload,
-} from "@/app/actions/IngredientActions";
+// import {
+//   CreateIngredient,
+//   CreateIngredientPayload,
+// } from "@/app/actions/IngredientActions";
 import { RedirectToSignIn, useAuth } from "@clerk/nextjs";
 import { Skeleton } from "../ui/skeleton";
 import CreateIngredientSkeleton from "../Skeletons/CreateIngredientSkeleton";
@@ -75,18 +75,18 @@ export default function CreateIngredientDialog({ setIngredients }: props) {
     setError(undefined);
     setCreatedIngredient(undefined);
 
-    const payload: CreateIngredientPayload = {
-      name: input.name,
-      description: input.description ? input.description : "",
-      createdBy: userId,
-    };
-    const res = await CreateIngredient(payload);
+    // const payload: CreateIngredientPayload = {
+    //   name: input.name,
+    //   description: input.description ? input.description : "",
+    //   createdBy: userId,
+    // };
+    // const res = await CreateIngredient(payload);
 
-    if (res?.error) setError(res.error);
-    if (res?.data) {
-      setCreatedIngredient(res.data);
-      setIngredients((prev) => [...prev, res?.data]);
-    }
+    // if (res?.error) setError(res.error);
+    // if (res?.data) {
+    //   setCreatedIngredient(res.data);
+    //   setIngredients((prev) => [...prev, res?.data]);
+    // }
     setLoading(false);
   };
 

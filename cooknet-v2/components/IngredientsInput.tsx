@@ -5,7 +5,6 @@ import IngredientIcon, {
   CombinedIngredient,
   SelectIngredientIcon,
 } from "./ui/IngredientIcon";
-import { getIngredients } from "@/app/actions/IngredientActions";
 import CreateIngredientDialog from "./Forms/CreateIngredientDialog";
 import { ToolTip } from "./ToolTip";
 import SelectIngredientForm from "./Forms/SelectIngredientForm";
@@ -43,14 +42,14 @@ export default function IngredientsInput({
     setError(undefined);
     setLoading(true);
 
-    const fetch = async () => {
-      const res = await getIngredients();
+    // const fetch = async () => {
+    //   const res = await getIngredients();
 
-      if (res.error) return setError(res.error);
-      if (res.data) return setIngredients(res.data);
-    };
+    //   if (res.error) return setError(res.error);
+    //   if (res.data) return setIngredients(res.data);
+    // };
 
-    fetch();
+    // fetch();
     setLoading(false);
   }, []);
 

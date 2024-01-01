@@ -6,6 +6,7 @@ export default async function Home() {
   // const recipes = await getRecipes();
   const recipes = await prisma.recipe.findMany({
     include: { author: { select: { username: true } } },
+    orderBy: { createdDate: "desc" },
   });
 
   return (

@@ -14,16 +14,17 @@ export default async function CookNet({
 }: {
   params: { user: string; recipeId: string };
 }) {
-  const recipe = await prisma.recipe.findUnique({
-    where: { id: params.recipeId, author: { username: params.user } },
-    include: {
-      ingredients: { include: { ingredient: true } },
-      likedBy: true,
-      author: true,
-    },
-  });
+  // const recipe = await prisma.recipe.findUnique({
+  //   where: { id: params.recipeId, author: { username: params.user } },
+  //   include: {
+  //     ingredients: { include: { ingredient: true } },
+  //     likedBy: true,
+  //     author: true,
+  //   },
+  // });
 
-  if (!recipe) return notFound();
+  // if (!recipe) return notFound();
+  return notFound();
 
   return (
     <main className="flex min-h-screen flex-col items-start justify-between p-10 gap-10 lg:flex-row ">
@@ -34,7 +35,7 @@ export default async function CookNet({
         alt="Thumbnail"
         className="w-full"
       /> */}
-      <div className="flex justify-center items-start flex-col gap-10">
+      {/* <div className="flex justify-center items-start flex-col gap-10">
         <RecipeHeader
           name={recipe.name}
           description={recipe.description}
@@ -44,7 +45,7 @@ export default async function CookNet({
         <CookActionButtons recipeId={params.recipeId} username={params.user} />
         <Ingredients ingredients={recipe.ingredients} isCooking />
         <Steps steps={recipe.steps} isCooking={true} />
-      </div>
+      </div> */}
     </main>
   );
 }

@@ -24,7 +24,7 @@ export default function useMultiFileUpload(initURLs?: string[]) {
     });
 
     setFileStates(states);
-  }, []);
+  }, [initURLs]);
 
   function handleFileChange(files: FileState[]) {
     setFileStates(files);
