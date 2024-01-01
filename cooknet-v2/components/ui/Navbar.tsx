@@ -22,14 +22,14 @@ export default async function Navbar() {
       </div>
       <div className="flex justify-center items-center gap-3">
         <SignedIn>
-          <Button size={"sm"}>
+          {/* <Button size={"sm"}>
             <Link
               href={`/${user?.username}/r/create`}
               className="text-sm font-normal leading-normal text-white"
             >
               Create Recipe
             </Link>
-          </Button>
+          </Button> */}
           <Button size={"sm"} variant={"secondary"}>
             <Link
               href={`/${user?.username}`}

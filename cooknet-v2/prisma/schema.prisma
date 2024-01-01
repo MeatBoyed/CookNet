@@ -33,10 +33,11 @@ model Recipe {
   id          String               @id @default(cuid())
   name        String
   description String
-  image       String
-  duration    Int
-  steps       String[]
-  ingredients IngredientOnRecipe[]
+  images       String[]
+  hours Int
+  minutes     Int
+  // steps       String[]
+  // ingredients IngredientOnRecipe[]
 
   createdDate DateTime @default(now())
   updatedAt   DateTime @updatedAt @map(name: "updated_at")
@@ -48,28 +49,28 @@ model Recipe {
 }
 
 // Define the Ingredient model
-model Ingredient {
-  id          String  @id @default(cuid())
-  name        String  @unique
-  description String?
-  createdBy   String
+// model Ingredient {
+//   id          String  @id @default(cuid())
+//   name        String  @unique
+//   description String?
+//   createdBy   String
 
-  recipes IngredientOnRecipe[]
-}
+//   recipes IngredientOnRecipe[]
+// }
 
 // Joining table for Recipe
-model IngredientOnRecipe {
-  id          String  @id @default(cuid())
-  quantity    Float
-  measurement String
-  optional    Boolean
+// model IngredientOnRecipe {
+//   id          String  @id @default(cuid())
+//   quantity    Float
+//   measurement String
+//   optional    Boolean
 
-  ingredientId String
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+//   ingredientId String
+//   ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
 
-  recipeId String
-  recipe   Recipe @relation(fields: [recipeId], references: [id])
-}
+//   recipeId String
+//   recipe   Recipe @relation(fields: [recipeId], references: [id])
+// }
 
 //
 /// Action Tables

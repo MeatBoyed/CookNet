@@ -1,11 +1,15 @@
 import RecipeCard from "@/components/RecipeCard";
 import { getRecipes } from "./actions/lib/RecipeHandles";
+import prisma from "@/lib/db";
 
 export default async function Home() {
-  const recipes = await getRecipes();
+  // const recipes = await getRecipes();
+  const recipes = await prisma.recipe.findMany({
+    include: { author: { select: { username: true } } },
+  });
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-10 gap-10">
+    <main className="flex flex-col items-center justify-center p-10 gap-10">
       <h1 className="text-3xl font-extrabold tracking-widest text-center">
         Feast Your Eyes on Our Recipes
       </h1>
@@ -17,13 +21,8 @@ export default async function Home() {
         {recipes.map((recipe, index) => (
           <RecipeCard
             key={index}
-            name={recipe.name}
-            recipeId={recipe.id}
-            createdAt={recipe.createdDate}
-            description={recipe.description}
+            recipe={recipe}
             username={recipe.author.username}
-            ingredientsObj={recipe.ingredients}
-            likes={30}
           />
         ))}
       </section>

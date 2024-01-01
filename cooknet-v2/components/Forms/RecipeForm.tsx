@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import CheeseBurger from "../../public/Alien Cheesburger.png";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import React, { useState } from "react";
@@ -14,14 +12,17 @@ import {
   CreateRecipePayload,
   DeleteRecipe,
   UpdateRecipe,
-} from "@/app/actions/RecipesAction";
+} from "@/app/actions/RecipesActionOld";
 import { Recipe } from "@prisma/client";
 import { EditActionButtons } from "../Recipe/ActionButtons";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { CreateRecipeLoadingText } from "@/lib/utils";
+import ImageUploader from "../ImageUploader";
+import { FileRes } from "@/app/actions/ImageActions";
 
 interface props {
+  initImage?: FileRes;
   userId: string;
   username: string;
   iRecipe?: Recipe;
@@ -29,11 +30,13 @@ interface props {
 }
 
 export default function RecipeForm({
+  initImage,
   userId,
   username,
   iRecipe,
   iIngredients,
 }: props) {
+  // Recipe Info
   const [ingredients, setIngredients] = useState<IngredientOnRecipeOmit[]>(
     iIngredients || []
   );
@@ -48,11 +51,17 @@ export default function RecipeForm({
     duration: iRecipe?.duration || 0, // in minutes
     steps: steps,
   });
+  const [recipeImage, setRcipeImage] = useState<FileRes | null>(
+    initImage || null
+  );
 
+  // Utils
   const router = useRouter();
+
+  // Resulting state
+  const [loading, setLoading] = useState<boolean>(false);
   const { inputError, validateRecipe } = useRecipeValidation();
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
-  const [loading, setLoading] = useState<boolean>(false);
 
   // Timer with little Afrikaans jokes
   // Halft-way - are you winning (Kom jy reg?)
@@ -67,11 +76,15 @@ export default function RecipeForm({
 
     if (!result) return setLoading(false);
 
+    const newSteps = steps.filter((step) => step != "input");
+
     setRecipe((prev) => ({
       ...prev,
-      image: "Image URL",
-      steps: steps,
+      image: recipeImage?.url || recipeImage?.base64Url || "",
+      steps: newSteps,
     }));
+
+    console.log(recipe);
 
     const res = await CreateRecipe(recipe, ingredients);
 
@@ -86,15 +99,21 @@ export default function RecipeForm({
     const result = validateRecipe(recipe, steps, ingredients);
     if (!result) return setLoading(false);
 
+    const newSteps = steps.filter((step) => step != "input");
+
     setRecipe((prev) => ({
       ...prev,
-      steps: steps,
+      image: recipeImage?.url || "",
+      steps: newSteps,
     }));
 
     if (!iRecipe) {
       setErrorMessage("Please create this Recipe first");
       return setLoading(false);
     }
+
+    console.log(recipe);
+
     const res = await UpdateRecipe(iRecipe.id, recipe, ingredients);
 
     if (res.error) setErrorMessage(res.error);
@@ -134,14 +153,11 @@ export default function RecipeForm({
   return (
     <div className="w-full flex min-h-screen flex-col items-center justify-between p-10 gap-10">
       <div className="w-full flex flex-col items-start justify-between gap-10 lg:flex-row">
-        {/* Upload image comp */}
-        {/* <Image
-          width={300}
-          height={300}
-          src={CheeseBurger}
-          alt="Thumbnail"
-          className="self-center"
-        /> */}
+        <ImageUploader
+          setUploadedImage={setRcipeImage}
+          uploadedImage={recipeImage}
+          type="recipe"
+        />
 
         <div className="w-full flex justify-center items-start flex-col gap-10">
           <div className="w-full flex justify-center items-start gap-3 flex-col">
@@ -150,7 +166,7 @@ export default function RecipeForm({
             </p>
             {iRecipe ? (
               <EditActionButtons
-                username={"Rando"}
+                username={username}
                 handleUpdate={updateRecipe}
                 handleDelete={deleteRecipe}
               />

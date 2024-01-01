@@ -13,6 +13,7 @@ import UserRecipeRender from "@/components/User/UserRecipeRender";
 
 export default async function User({ params }: { params: { user: string } }) {
   const user = await currentUser();
+
   const pageUser = await prisma.user.findUnique({
     where: { username: params.user },
     select: { id: true, username: true, profileImage: true },
@@ -26,9 +27,9 @@ export default async function User({ params }: { params: { user: string } }) {
   const recipesCount = await getRecipesCount(pageUser.id);
 
   const recipes = await GetUsersRecipes(pageUser.id);
-  const cookBook = await GetRecipeCookBook(pageUser.id);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start p-10 gap-10">
+    <div className="w-full flex flex-col justify-center items-center gap-10">
       <UserHeader
         profileImage={pageUser.profileImage}
         username={pageUser.username}
@@ -37,22 +38,11 @@ export default async function User({ params }: { params: { user: string } }) {
       />
 
       <UserRecipeRender
-        username={user.username || ""}
+        userId={user.id}
         recipes={recipes}
-        cookBook={cookBook}
+        username={user.username || ""}
         isAuth={pageUser.id == user.id}
       />
-      {/* <section
-        id="Ingredients"
-        className="flex flex-col justify-center items-start gap-3 w-full"
-      >
-        <p className="text-base font-semibold tracking-widest">Cook Book</p>
-        <div className="">
-          <RecipeCard />
-          <RecipeCard />
-          <RecipeCard />
-        </div>
-      </section> */}
-    </main>
+    </div>
   );
 }

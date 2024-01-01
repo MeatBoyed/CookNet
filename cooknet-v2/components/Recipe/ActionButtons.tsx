@@ -82,10 +82,10 @@ export function RecipeActionButtons({
   return (
     <div className="flex flex-col justify-center items-start gap-3">
       <div className="flex justify-center items-center gap-3">
-        <Button className="flex justify-between items-center gap-3">
+        {/* <Button className="flex justify-between items-center gap-3">
           <Link href={`/${username}/r/${recipeId}/cook`}>CookNet</Link>
           <ToolTip message="Design " />
-        </Button>
+        </Button> */}
         {isAuthor && (
           <Button variant={"outline"}>
             <Link href={`/${username}/r/${recipeId}/edit`}>Edit</Link>

@@ -7,6 +7,7 @@ import CheeseBurger from "../../../../public/Alien Cheesburger.png";
 import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
 import { RedirectToSignIn, auth, currentUser } from "@clerk/nextjs";
+import ImageCarousel from "@/components/ImageCarousel";
 
 export default async function Recipe({
   params,
@@ -17,7 +18,6 @@ export default async function Recipe({
   const recipe = await prisma.recipe.findUnique({
     where: { id: params.recipeId, author: { username: params.user } },
     include: {
-      ingredients: { include: { ingredient: true } },
       likedBy: true,
       author: true,
     },
@@ -32,31 +32,23 @@ export default async function Recipe({
   });
 
   return (
-    <main className="flex min-h-screen flex-col items-start justify-between p-10 gap-10 lg:flex-row ">
-      {/* <Image
-        width={320}
-        height={320}
-        src={CheeseBurger}
-        alt="Thumbnail"
-        className="w-80 self-center md:self-start"
-      /> */}
-      <div className="w-full flex justify-center items-start flex-col gap-10">
-        <RecipeHeader
-          name={recipe.name}
-          description={recipe.description}
-          username={recipe.author.username}
-          createdAt={recipe.createdDate}
-        />
-        <RecipeActionButtons
-          userId={user?.id}
-          recipeId={params.recipeId}
-          username={params.user}
-          isAuthor={user?.id === recipe.authorId}
-          cookBook={userCookBook?.cookbook || []}
-        />
-        <Ingredients ingredients={recipe.ingredients} />
-        <Steps steps={recipe.steps} />
-      </div>
-    </main>
+    <div className="flex justify-center items-center flex-col gap-10">
+      <ImageCarousel images={recipe.images} />
+      <RecipeHeader
+        name={recipe.name}
+        description={recipe.description}
+        username={recipe.author.username}
+        createdAt={recipe.createdDate}
+      />
+      <RecipeActionButtons
+        userId={user?.id}
+        recipeId={params.recipeId}
+        username={params.user}
+        isAuthor={user?.id === recipe.authorId}
+        cookBook={userCookBook?.cookbook || []}
+      />
+      {/* <Ingredients ingredients={recipe.ingredients} />
+        <Steps steps={recipe.steps} /> */}
+    </div>
   );
 }

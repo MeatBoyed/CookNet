@@ -7,6 +7,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const MaxImageSize = 1024 * 1024 * 16; // 16 MiB
+
 // Measurments
 export const measurementSchema = z.enum([
   "Empty",

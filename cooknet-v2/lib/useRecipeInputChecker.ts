@@ -1,4 +1,4 @@
-import { CreateRecipePayload } from "@/app/actions/RecipesAction";
+import { CreateRecipePayload } from "@/app/actions/RecipesActionOld";
 import { IngredientOnRecipeOmit } from "@/components/IngredientsInput";
 import { Recipe } from "@prisma/client";
 import { useState } from "react";

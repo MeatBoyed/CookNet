@@ -85,7 +85,10 @@ export default function StepsInput({ errorMessage, steps, setSteps }: props) {
               className="w-full"
               onClick={() => {
                 setError(false);
-                if (step !== "") return setSteps((prev) => [...prev, step]);
+                if (step !== "") {
+                  setStep("");
+                  return setSteps((prev) => [...prev, step]);
+                }
                 setError(true);
               }}
             >

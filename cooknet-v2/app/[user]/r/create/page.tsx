@@ -1,4 +1,6 @@
+import { GetRecipeImage } from "@/app/actions/ImageActions";
 import RecipeForm from "@/components/Forms/RecipeForm";
+import RecipeFormInsta from "@/components/Forms/RecipeFormInsta";
 import { RedirectToSignUp, auth, currentUser } from "@clerk/nextjs";
 
 export default async function CreateRecipePage() {
@@ -6,5 +8,8 @@ export default async function CreateRecipePage() {
 
   if (!user) return <RedirectToSignUp />;
 
-  return <RecipeForm userId={user.id} username={user.username || ""} />;
+  // return <RecipeForm userId={user.id} username={user.username || ""} />;
+  return (
+    <RecipeFormInsta user={{ id: user.id, username: user.username || "" }} />
+  );
 }
